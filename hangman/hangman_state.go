@@ -80,9 +80,8 @@ type Game struct {
 	IncorrectGuesses int
 	CurrentWordState []string
 	MaxAttempts      int
-  IsGameOver bool
-  IsWordGuessed bool
-  GetDisplayWord string
+	IsWordGuessed    bool
+	GetDisplayWord   string
 
 }
 
@@ -126,7 +125,7 @@ func IsWordGuessed(guessed []string, word string) bool {
 	return strings.Join(guessed, "") == word
 }
 
-func IsGameOver(g *Game) bool {
+func (g *Game) IsGameOver() bool {
 	return g.IncorrectGuesses >= g.MaxAttempts || IsWordGuessed(g.CurrentWordState, g.TargetWord)
 }
 
