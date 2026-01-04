@@ -1,0 +1,49 @@
+# ===== Go build artifacts =====
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Go test binaries
+*.test
+
+# Go coverage output
+*.out
+coverage*.txt
+
+# Go workspace file (Go 1.18+)
+go.work
+
+# ===== Build directories =====
+/bin/
+/dist/
+/build/
+
+# ===== Vendor (optional) =====
+/vendor/
+
+# ===== IDE / Editor files =====
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ===== Debug / profiling =====
+*.pprof
+*.trace
+
+# ===== Environment / secrets =====
+.env
+.env.*
+*.key
+*.pem
+
+# ===== Logs =====
+*.log
+
+# ===== Temporary files =====
+tmp/
+temp/
