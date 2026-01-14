@@ -1,10 +1,10 @@
 package ui
 
 import (
+	"image/color"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
-	"image/color"
 )
 
 type HangmanDrawer struct {
@@ -13,7 +13,7 @@ type HangmanDrawer struct {
 }
 
 func NewHangmanDrawer() *HangmanDrawer {
-	strokeColor := color.Black
+	strokeColor := color.RGBA{R: 25, G: 255, B: 25, A: 255}
 	strokeWidth := float32(3.0)
 
 	// Static parts

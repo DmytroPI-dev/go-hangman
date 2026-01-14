@@ -9,70 +9,6 @@ import (
 	"unicode"
 )
 
-var hangmanStates = []string{
-	`
-  +---+
-  |   |
-      |
-      |
-      |
-      |
-=========
-`,
-	`
-  +---+
-  |   |
-  O   |
-      |
-      |
-      |
-=========
-`,
-	`
-  +---+
-  |   |
-  O   |
-  |   |
-      |
-      |
-=========
-`,
-	`
-  +---+
-  |   |
-  O   |
- /|   |
-      |
-      |
-=========
-`,
-	`
-  +---+
-  |   |
-  O   |
- /|\  |
-      |
-      |
-=========
-`,
-	`
-  +---+
-  |   |
-  O   |
- /|\  |
- /    |
-      |
-=========
-`,
-	`
-  +---+
-  |   |
-  O   |
- /|\  |
- / \  |
-      |
-=========
-`}
 
 type Game struct {
 	TargetWord       string
@@ -82,7 +18,6 @@ type Game struct {
 	MaxAttempts      int
 	IsWordGuessed    bool
 	GetDisplayWord   string
-
 }
 
 func NewGame(targetWord string, maxAttempts int) *Game {
