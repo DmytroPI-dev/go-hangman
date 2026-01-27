@@ -1,0 +1,33 @@
+{
+    "en": [
+        {
+            "text": "COMPUTER",
+            "hint": "Digital processing machine"
+        },
+        {
+            "text": "SUN",
+            "hint": "Our solar star"
+        }
+    ],
+    "pl": [
+        {
+            "text": "KOMPUTER",
+            "hint": "Maszyna do pracy"
+        },
+        {
+            "text": "SŁOŃCE",
+            "hint": "Nasza jasna gwiazda"
+        }
+    ],
+    "ua": [
+        {
+            "text": "КОМП'ЮТЕР",
+            "hint": "Цифрова обчислювальна машина"
+        },
+        {
+            "text": "СОНЦЕ",
+            "hint": "Наша головна зоря"
+        }
+    ]
+}
+

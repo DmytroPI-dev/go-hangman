@@ -47,3 +47,13 @@ go.work
 # ===== Temporary files =====
 tmp/
 temp/
+
+# ===== Wasm build   =====
+wasm/
+
+# ====== Firebase files =====
+keys/
+
+# ===== Environment variables ======
+.env
+.env.*
