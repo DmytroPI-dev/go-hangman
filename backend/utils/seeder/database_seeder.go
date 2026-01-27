@@ -110,10 +110,10 @@ func main() {
 				continue
 			}
 
-			payload := map[string]interface{}{
-				"fields": map[string]interface{}{
-					"text": map[string]interface{}{"stringValue": cleanText},
-					"hint": map[string]interface{}{"stringValue": w.Hint},
+			payload := map[string]any{
+				"fields": map[string]any{
+					"text": map[string]any{"stringValue": cleanText},
+					"hint": map[string]any{"stringValue": w.Hint},
 				},
 			}
 

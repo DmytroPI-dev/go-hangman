@@ -57,3 +57,6 @@ keys/
 # ===== Environment variables ======
 .env
 .env.*
+
+# ===== Frontend Node modules =====
+/frontend/node_modules/
