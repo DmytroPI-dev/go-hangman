@@ -12,16 +12,16 @@ function WordDisplay({ currentWord }: WordDisplayProps) {
             {currentWord.split(" ").map((char, index) => (
                 <Box
                     key={index}
-                    w="50px"
-                    h="50px"
-                    borderWidth={2}
-                    borderRadius="md"
+                    w={{ base: "24px", sm: "12px", md: "40px" }}  // Smaller on mobile
+                    h={{ base: "32px", sm: "12px", md: "50px" }}
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
-                    bg="gray.50"
+                    borderBottom="1px solid"
+                    borderColor="gray.700"
+                    fontWeight="bold"
                 >
-                    <Text fontSize="2xl" fontWeight="bold" fontFamily="monospace">
+                    <Text fontSize={{ base: "lg", sm: "xl", md: "2xl" }}>
                         {char}
                     </Text>
                 </Box>

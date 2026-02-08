@@ -154,81 +154,159 @@ function App() {
 
   // Main game interface with hangman drawing, word display, keyboard, and action buttons
   return (
-    <Box minH="100vh" display="flex" alignItems="center" justifyContent="center" bg="gray.100" p={4}>
-      <Box {...workbookPageStyles}>
-        <Box {...redMarginStyles} />
-        {/* Settings Drawer */}
-        <Button
-          leftIcon={<span>⚙️</span>}
-          onClick={onSettingsOpen}
-          variant="ghost"
-          size="sm"
-          position="absolute"
-          top={4}
-          right={6}
-          colorScheme="blue"
-        /> 
-        {/* Help Modal */}
-        <Button
-          leftIcon={<span>❓</span>}
-          onClick={onHelpOpen}
-          variant="ghost"
-          size="sm"
-          position="absolute"
-          top={10}
-          right={6}
-          colorScheme="teal"
-        />
-        <VStack spacing={6} maxW="800px" mx="auto">
-          <Heading as="h1" size="2xl" color="#1a2a6c">Hangman Game</Heading>
+    <>
+      {/* SVG Filter for hand-drawn effect */}
+      < svg width="0" height="0" style={{ position: 'absolute' }}>
+        <defs>
+          <filter id="wavy-btn">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.02"
+              numOctaves="3"
+              result="noise"
+            />
+            <feDisplacementMap
+              in="SourceGraphic"
+              in2="noise"
+              scale="3"
+              xChannelSelector="R"
+              yChannelSelector="G"
+            />
+          </filter>
+        </defs>
+      </svg >
+      <Box minH="100vh" display="flex" alignItems="center" justifyContent="center" bg="gray.100" p={{ base: 0, md: 4 }}>
+        <Box {...workbookPageStyles}>
+          <Box {...redMarginStyles} />
+          {/* Settings Button */}
+          <Button
+            leftIcon={<span>⚙️</span>}
+            onClick={onSettingsOpen}
+            variant="ghost"
+            size="sm"
+            position="absolute"
+            top={4}
+            right={6}
+            colorScheme="blue"
+          />
 
-          {/* Game status */}
-          <HStack spacing={4}>
-            <Text fontSize="lg">Attempts left: {triesLeft}</Text>
-          </HStack>
-          {/* Hangman drawing */}
-          <HangmanDraw incorrectGuesses={maxTries - triesLeft} difficulty={difficulty} />
-          {/* Word display */}
-          <WordDisplay currentWord={currentWord} />
-          {/* Keyboard */}
-          <Keyboard language={language} guessedLetters={guessedLetters} onLetterClick={handleLetterClick} disabled={isGameOver} />
-          {/* Action buttons */}
-          <HStack spacing={4}>
-            <Button colorScheme="blue" onClick={handleHintClick} isDisabled={isGameOver}>Get Hint</Button>
-            <Button colorScheme="teal" onClick={handleRevealLetter} isDisabled={isGameOver || triesLeft <= 1}>Reveal Letter</Button>
-            <Button colorScheme="green" onClick={handleNewGame}>New Game</Button>
-          </HStack>
-          {/* Game over message */}
-          {isGameOver && (
-            <Box
-              p={4}
-              bg={won ? "green.100" : "red.100"}
-              borderRadius="md"
-              borderWidth={2}
-              borderColor={won ? 'green.500' : 'red.500'}
-            >
-              <Heading size="lg" color={won ? "green.500" : "red.500"}
-              >{won ? '🎉 You Won!' : '😢 Game Over'}</Heading>
-              <Text mt={2}>The word was: <strong>{currentWord.replace(/_/g, ' ')}</strong></Text>
-            </Box>
-          )}
-        </VStack>
+          {/* Help Button */}
+          <Button
+            leftIcon={<span>❓</span>}
+            onClick={onHelpOpen}
+            variant="ghost"
+            size="sm"
+            position="absolute"
+            top={12}
+            right={6}
+            colorScheme="teal"
+          />
+          <VStack spacing={{ base: 4, md: 6 }} maxW="800px" mx="auto" px={{ base: 2, md: 0 }}>
+            <Heading as="h1" size={{ base: "xl", md: "2xl" }} color="#1a2a6c">Hangman Game</Heading>
+            {/* Game status */}
+            <HStack spacing={4}>
+              <Text fontSize="lg">Attempts left: {triesLeft}</Text>
+            </HStack>
+            {/* Hangman drawing */}
+            <HangmanDraw incorrectGuesses={maxTries - triesLeft} difficulty={difficulty} />
+            {/* Word display */}
+            <WordDisplay currentWord={currentWord} />
+            {/* Keyboard */}
+            <Keyboard language={language} guessedLetters={guessedLetters} onLetterClick={handleLetterClick} disabled={isGameOver} />
+            {/* Action buttons */}
+            <HStack spacing={4} flexWrap="wrap" justifyContent="center">
+              <Button
+                colorScheme="blue"
+                onClick={handleHintClick}
+                isDisabled={isGameOver}
+                size={{ base: "sm", md: "md" }}
+                border="2px solid"
+                borderColor="blue.600"
+                bg="white"
+                color="blue.600"
+                fontWeight="bold"
+                transform={`rotate(${Math.random() * 2 - 1}deg)`}
+                boxShadow="2px 2px 0px rgba(0,0,0,0.1)"
+                sx={{ filter: 'url(#wavy-btn)' }}
+                _hover={{
+                  bg: "blue.50",
+                  transform: "translateY(-1px)",
+                }}
+              >
+                💡 Get Hint
+              </Button>
+              <Button
+                colorScheme="teal"
+                onClick={handleRevealLetter}
+                isDisabled={isGameOver || triesLeft <= 1}
+                size={{ base: "sm", md: "md" }}
+                border="2px solid"
+                borderColor="teal.600"
+                bg="white"
+                color="teal.600"
+                fontWeight="bold"
+                transform={`rotate(${Math.random() * 2 - 1}deg)`}
+                boxShadow="2px 2px 0px rgba(0,0,0,0.1)"
+                sx={{ filter: 'url(#wavy-btn)' }}
+                _hover={{
+                  bg: "teal.50",
+                  transform: "translateY(-1px)",
+                }}
+              >
+                🔍 Reveal Letter
+              </Button>
+              <Button
+                colorScheme="green"
+                onClick={handleNewGame}
+                size={{ base: "sm", md: "md" }}
+                border="2px solid"
+                borderColor="green.600"
+                bg="white"
+                color="green.600"
+                fontWeight="bold"
+                transform={`rotate(${Math.random() * 2 - 1}deg)`}
+                boxShadow="2px 2px 0px rgba(0,0,0,0.1)"
+                sx={{ filter: 'url(#wavy-btn)' }}
+                _hover={{
+                  bg: "green.50",
+                  transform: "translateY(-1px)",
+                }}
+              >
+                🎮 New Game
+              </Button>
+            </HStack>
+            {/* Game over message */}
+            {isGameOver && (
+              <Box
+                p={4}
+                bg={won ? "green.100" : "red.100"}
+                borderRadius="md"
+                borderWidth={2}
+                borderColor={won ? 'green.500' : 'red.500'}
+              >
+                <Heading size="lg" color={won ? "green.500" : "red.500"}
+                >{won ? '🎉 You Won!' : '😢 Game Over'}</Heading>
+                <Text mt={2}>The word was: <strong>{currentWord.replace(/_/g, ' ')}</strong></Text>
+              </Box>
+            )}
+          </VStack>
+        </Box>
+        {/* // Settings Drawer */}
+        <SettingsDrawer
+          isOpen={isSettingsOpen}
+          onClose={onSettingsClose}
+          currentLanguage={language}
+          currentDifficulty={difficulty}
+          onLanguageChange={updateLanguage}
+          onDifficultyChange={updateDifficulty}
+          onSaveAndNewGame={handleSettingsChange}  // This will receive (lang, diff)
+        />
+        <HelpModal
+          isOpen={isHelpOpen}
+          onClose={onHelpClose}
+        />
       </Box>
-      {/* // Settings Drawer */}
-      <SettingsDrawer
-        isOpen={isSettingsOpen}
-        onClose={onSettingsClose}
-        currentLanguage={language}
-        currentDifficulty={difficulty}
-        onLanguageChange={updateLanguage}
-        onDifficultyChange={updateDifficulty}
-        onSaveAndNewGame={handleSettingsChange}  // This will receive (lang, diff)
-      />
-      <HelpModal
-        isOpen={isHelpOpen}
-        onClose={onHelpClose}
-      />
-    </Box>
+    </>
   );
 }
 

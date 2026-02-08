@@ -1,4 +1,4 @@
-import { VStack, HStack, Button } from "@chakra-ui/react";
+import { VStack, HStack, Button, useBreakpointValue, Box } from "@chakra-ui/react";
 import type { Language } from "../types/game";
 
 // Keyboard component to display the alphabet buttons for guessing
@@ -19,30 +19,127 @@ const alphabets = {
     pl: ['QWERTYUIOPŻŹ', 'ASDFGHJKLŁĄ', 'ZXCVBNMŚĆĘŃ']
 }
 
+// mobile-friendly keyboard component 
+const mAlphabets = {
+    en: ['QWERT', 'YUIOP', 'ASDFG', 'HJKLZ', 'XCVBNM'],
+    ua: ['ЙЦУКЕНГ', 'ШЩЗХЇҐФ', 'ІВАПРОЛ', 'ДЖЄЯЧС', 'МИТЬБЮ' ],
+    pl: ['QWERTYU', 'IOPŻŹA', 'SDFGHJK', 'LŁĄZXCVB', 'NMŚĆĘŃ']
+}
+
 // Component to display the alphabet buttons for guessing
 function Keyboard({ language, guessedLetters, onLetterClick, disabled = false }: KeyboardProps) {
-    const alphabet = alphabets[language]
+    const isMobile = useBreakpointValue({ base: true, md: false })
+
+    const alphabet = isMobile ? mAlphabets[language] : alphabets[language]
     const isGuessed = (letter: string) => guessedLetters.includes(letter) || guessedLetters.includes(letter.toLocaleLowerCase());
 
     return (
-        <VStack spacing={4}>
-            {alphabet.map((row, rowIndex) => (
-                <HStack key={rowIndex} spacing={2} justify="center">
-                    {row.split("").map((letter) => (
-                        <Button
-                            key={letter}
-                            onClick={() => onLetterClick(letter)}
-                            isDisabled={disabled || isGuessed(letter)}
-                            colorScheme={isGuessed(letter) ? "green" : "blue"}
-                        >
-                            {letter}
-                        </Button>
-                    ))}
-                </HStack>
-            ))}
-        </VStack>
+        <>
+            {/* SVG Filter for hand-drawn effect */}
+            <svg width="0" height="0" style={{ position: 'absolute' }}>
+                <defs>
+                    <filter id="wavy">
+                        <feTurbulence
+                            type="fractalNoise"
+                            baseFrequency="0.02"
+                            numOctaves="3"
+                            result="noise"
+                        />
+                        <feDisplacementMap
+                            in="SourceGraphic"
+                            in2="noise"
+                            scale="14"
+                            xChannelSelector="R"
+                            yChannelSelector="G"
+                        />
+                    </filter>
+                </defs>
+            </svg>
+
+            <VStack spacing={4}>
+                {alphabet.map((row, rowIndex) => (
+                    <HStack key={rowIndex} spacing={2} justify="center">
+                        {row.split("").map((letter) => {
+                            const guessed = isGuessed(letter);
+
+                            return (
+                                <Box key={letter} position="relative">
+                                    <Button
+                                        onClick={() => onLetterClick(letter)}
+                                        isDisabled={disabled || guessed}
+                                        bg={guessed ? "#e8f5e9" : "white"}
+                                        color={guessed ? "#4caf50" : "#1a2a6c"}
+                                        border="2px solid"
+                                        borderColor={guessed ? "#4caf50" : "#1a2a6c"}
+                                        borderRadius="4px"
+                                        size={{ base: "sm", sm: "xs", md: "md" }}
+                                        minW={{ base: "36px", sm: "36px", md: "48px" }}
+                                        h={{ base: "40px", sm: "32px", md: "40px" }}
+                                        fontSize={{ base: "sm", sm: "xs", md: "md" }}
+                                        fontWeight="bold"
+                                        p={{ base: 1.5, sm: 1, md: 2 }}
+                                        _hover={{
+                                            bg: guessed ? "#e8f5e9" : "#f0f0f0",
+                                            transform: "translateY(-1px)",
+                                        }}
+                                        _active={{
+                                            transform: "translateY(0)",
+                                        }}
+                                        cursor={disabled || guessed ? "not-allowed" : "pointer"}
+                                        transform={`rotate(${Math.random() * 2 - 1}deg)`}
+                                        boxShadow="2px 2px 0px rgba(0,0,0,0.1)"
+                                        // Apply hand-drawn filter to borders
+                                        sx={{
+                                            filter: 'url(#wavy)',
+                                        }}
+                                    >
+                                        {letter}
+                                    </Button>
+
+                                    {/* X-cross for guessed letters */}
+                                    {guessed && (
+                                        <Box
+                                            position="absolute"
+                                            top="0"
+                                            left="0"
+                                            right="0"
+                                            bottom="0"
+                                            pointerEvents="none"
+                                        >
+                                            {/* First diagonal line */}
+                                            <Box
+                                                position="absolute"
+                                                top="50%"
+                                                left="10%"
+                                                right="10%"
+                                                h="2px"
+                                                bg="#d32f2f"
+                                                transform="rotate(45deg)"
+                                                transformOrigin="center"
+                                                sx={{ filter: 'url(#wavy)' }}  // Wavy X too
+                                            />
+                                            {/* Second diagonal line */}
+                                            <Box
+                                                position="absolute"
+                                                top="50%"
+                                                left="10%"
+                                                right="10%"
+                                                h="2px"
+                                                bg="#d32f2f"
+                                                transform="rotate(-45deg)"
+                                                transformOrigin="center"
+                                                sx={{ filter: 'url(#wavy)' }}  // Wavy X too
+                                            />
+                                        </Box>
+                                    )}
+                                </Box>
+                            );
+                        })}
+                    </HStack>
+                ))}
+            </VStack>
+        </>
     )
 }
 
 export default Keyboard;
-

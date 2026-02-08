@@ -50,7 +50,25 @@ function HangmanDraw({ incorrectGuesses, difficulty }: HangmanDrawProps) {
 
     return (
         <Box w="200px" h="200px" mx="auto">
-            <svg width="200" height="200">
+            <svg width="200" height="200" style={{ filter: 'url(#wavy-hangman)' }}>
+                <defs>
+                    <filter id="wavy-hangman">
+                        <feTurbulence
+                            type="fractalNoise"
+                            baseFrequency="0.015"
+                            numOctaves="2"
+                            result="noise"
+                        />
+                        <feDisplacementMap
+                            in="SourceGraphic"
+                            in2="noise"
+                            scale="10"
+                            xChannelSelector="R"
+                            yChannelSelector="G"
+                        />
+                    </filter>
+                </defs>
+
                 {gallows}
                 {bodyParts.slice(0, incorrectGuesses).map((group, idx) => (
                     <g key={idx}>{group}</g>
