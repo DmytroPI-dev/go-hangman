@@ -18,24 +18,21 @@ type Game struct {
 }
 
 func NewGame(targetWord, hint string, maxAttempts int) *Game {
-	targetRunes := []rune(targetWord)
-	currentWordState := make([]string, len(targetRunes))
-	for i, r := range targetRunes {
-		if unicode.IsLetter(r) {
-			currentWordState[i] = "_"
-		} else {
-			currentWordState[i] = string(r)
-		}
-	}
+    currentWordState := make([]string, 0)  
+    for _, r := range targetWord {
+        if unicode.IsLetter(r) {
+            currentWordState = append(currentWordState, "_")
+        }
+    }
 
-	return &Game{
-		TargetWord:       targetWord,
-		Hint:             hint,
-		GuessedLetters:   make(map[rune]bool),
-		IncorrectGuesses: 0,
-		CurrentWordState: currentWordState,
-		MaxAttempts:      maxAttempts,
-	}
+    return &Game{
+        TargetWord:       targetWord,
+        Hint:             hint,
+        GuessedLetters:   make(map[rune]bool),
+        IncorrectGuesses: 0,
+        CurrentWordState: currentWordState,
+        MaxAttempts:      maxAttempts,
+    }
 }
 
 func (g *Game) MakeGuess(letter rune) bool {

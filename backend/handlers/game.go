@@ -74,9 +74,15 @@ func NewGame(c *gin.Context) {
 	gameInstance := game.NewGame(word.Text, word.Hint, maxAttempts)
 	// Create a new session for the game
 	sessionID := sm.CreateSession(gameInstance)
+	letterCount := 0
+	for _, char := range word.Text {
+		if unicode.IsLetter(char) {
+			letterCount++
+		}
+	}
 	resp := NewGameResponse{
 		SessionID:   sessionID,
-		WordLength:  len(word.Text),
+		WordLength:  letterCount,
 		MaxAttempts: maxAttempts,
 	}
 	c.JSON(http.StatusOK, resp)
@@ -101,6 +107,17 @@ func MakeGuess(c *gin.Context) {
 
 	isGameOver := gameInstance.IsGameOver()
 	isWon := game.IsWordGuessed(gameInstance.CurrentWordState, gameInstance.TargetWord)
+
+	if isGameOver && !isWon {
+		// If the game is over and the player lost, reveal the word
+		wordStateIdx := 0
+		for _, char := range gameInstance.TargetWord {
+			if unicode.IsLetter(char) {
+					gameInstance.CurrentWordState[wordStateIdx] = string(char)
+					wordStateIdx++
+			}
+		}
+	}
 
 	resp := GuessResponse{
 		Correct:     correct,
@@ -148,20 +165,42 @@ func RevealLetter(c *gin.Context) {
 		return
 	}
 
-	if gameInstance.MaxAttempts-gameInstance.IncorrectGuesses > 0 {
-		for i, char := range gameInstance.TargetWord {
-			if gameInstance.CurrentWordState[i] == "_" && unicode.IsLetter(char) {
-				gameInstance.CurrentWordState[i] = string(char)
-				gameInstance.IncorrectGuesses++
-				break
-			}
-		}
-	} else {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "No more attempts left to reveal a letter"})
+	if gameInstance.MaxAttempts-gameInstance.IncorrectGuesses <= 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "No more attempts left"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"current_word": strings.Join(gameInstance.CurrentWordState, " ")})
+	// Reveal one letter and increment incorrect guesses
+	for i, char := range gameInstance.TargetWord {
+		if gameInstance.CurrentWordState[i] == "_" && unicode.IsLetter(char) {
+			gameInstance.CurrentWordState[i] = string(char)
+			gameInstance.IncorrectGuesses++
+			break
+		}
+	}
+
+	isGameOver := gameInstance.IsGameOver()
+	isWon := game.IsWordGuessed(gameInstance.CurrentWordState, gameInstance.TargetWord)
+
+	// Same reveal logic as MakeGuess
+	if isGameOver && !isWon {
+		wordStateIdx := 0
+		for _, char := range gameInstance.TargetWord {
+			if unicode.IsLetter(char) {
+				gameInstance.CurrentWordState[wordStateIdx] = string(char)
+				wordStateIdx++
+			}
+		}
+	}
+
+	resp := GuessResponse{
+		Correct:     true,
+		CurrentWord: strings.Join(gameInstance.CurrentWordState, " "),
+		TriesLeft:   gameInstance.MaxAttempts - gameInstance.IncorrectGuesses,
+		IsGameOver:  isGameOver,
+		IsWon:       isWon,
+	}
+	c.JSON(http.StatusOK, resp)
 }
 
 // getGameInstance is a helper function to extract, validate, and retrieve
