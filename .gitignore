@@ -60,3 +60,9 @@ keys/
 
 # ===== Frontend Node modules =====
 /frontend/node_modules/
+
+# ===== Firebase hosting files =====
+/firebase.json
+.firebaserc
+firebase.json
+frontend/.firebase
