@@ -10,6 +10,7 @@ import WordDisplay from "./components/WordDisplay";
 import Keyboard from "./components/Keyboard";
 import HangmanDraw from "./components/HangmanDraw";
 import Intro from "./components/Intro";
+import HelpModal from "./components/HelpModal";
 import SettingsDrawer from "./components/SettingsDrawer";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
     return language !== 'en' || difficulty !== 'Easy' || !isFirstVisit;
   });
   const { isOpen: isSettingsOpen, onOpen: onSettingsOpen, onClose: onSettingsClose } = useDisclosure();
+  const { isOpen: isHelpOpen, onOpen: onHelpOpen, onClose: onHelpClose } = useDisclosure();
 
   const toast = useToast();
   const {
@@ -163,11 +165,20 @@ function App() {
           size="sm"
           position="absolute"
           top={4}
-          right={4}
+          right={6}
           colorScheme="blue"
-        >
-
-        </Button>
+        /> 
+        {/* Help Modal */}
+        <Button
+          leftIcon={<span>❓</span>}
+          onClick={onHelpOpen}
+          variant="ghost"
+          size="sm"
+          position="absolute"
+          top={10}
+          right={6}
+          colorScheme="teal"
+        />
         <VStack spacing={6} maxW="800px" mx="auto">
           <Heading as="h1" size="2xl" color="#1a2a6c">Hangman Game</Heading>
 
@@ -212,6 +223,10 @@ function App() {
         onLanguageChange={updateLanguage}
         onDifficultyChange={updateDifficulty}
         onSaveAndNewGame={handleSettingsChange}  // This will receive (lang, diff)
+      />
+      <HelpModal
+        isOpen={isHelpOpen}
+        onClose={onHelpClose}
       />
     </Box>
   );
