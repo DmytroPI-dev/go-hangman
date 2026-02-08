@@ -1,0 +1,34 @@
+// Type definitions for the Hangman game, including request and response structures for API calls, and types for game state, language, and difficulty settings.
+export type NewGameRequest = {
+    language: Language
+    difficulty: Difficulty
+}
+
+export type NewGameResponse = {
+    session_id: string
+    word_length: number
+    max_attempts: number
+}
+
+export type GuessRequest = {
+    letter: string
+}
+
+export type GuessResponse = {
+    correct: boolean
+    current_word: string
+    tries_left: number
+    is_game_over: boolean
+    won: boolean
+}
+
+export type GameState = {
+    current_word: string
+    tries_left: number
+    is_game_over: boolean
+    won: boolean
+}
+
+export type Language = "en" | "ua" | "pl"
+  
+export type Difficulty = "Easy" | "Normal" | "Hard"
