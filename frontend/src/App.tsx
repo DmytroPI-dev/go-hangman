@@ -3,7 +3,7 @@ import { useDisclosure } from "@chakra-ui/react";
 import { workbookPageStyles, redMarginStyles } from "./theme/workBookTheme";
 import { useGame } from "./hooks/useGame";
 import { useSettings } from "./hooks/useSettings";
-import { useState, useEffect } from "react";
+import { useState, useEffect, } from "react";
 import type { Difficulty, Language } from "./types/game";
 import GameSetup from "./components/GameSetup";
 import WordDisplay from "./components/WordDisplay";
@@ -31,6 +31,7 @@ function App() {
     won,
     isLoading,
     hint,
+    resetHint,
     startNewGame,
     makeGuess,
     requestHint,
@@ -55,7 +56,7 @@ function App() {
     if (!sessionId && hasConfiguredSettings && !isFirstVisit && !isLoading) {
       startNewGame(language, difficulty);
     }
-  }, [sessionId, hasConfiguredSettings, isFirstVisit]);
+  }, [sessionId, hasConfiguredSettings, isFirstVisit, isLoading]);
 
   // Keyboard event listener for letter guesses
   useEffect(() => {
@@ -69,7 +70,7 @@ function App() {
         // Language-specific validation
         if (language === "en" && /^[a-z]$/.test(key)) {
           makeGuess(key);
-        } else if (language === "ua" && /^[\u0400-\u04FF]$/.test(key)) {
+        } else if (language === "ua" && (/^[\u0400-\u04FF]$/.test(key) || key === "'")) {
           makeGuess(key);
         } else if (language === "pl" && /^[a-ząćęłńóśźż]$/.test(key)) {
           makeGuess(key);
@@ -81,6 +82,23 @@ function App() {
       };
     }
   }, [isGameOver, sessionId, guessedLetters, language, makeGuess]);
+
+  useEffect(() => {
+    if (hint) {
+      toast({
+        title: "Hint",
+        description: hint,
+        duration: 3000,
+        isClosable: true,
+        position: "bottom",
+        containerStyle: {
+          fontSize: "2xl",
+          fontWeight: "bold",
+        },
+      });
+      resetHint();
+    };
+  }, [hint, toast, resetHint]);
 
   // Function to handle game start with selected settings, called from GameSetup component
   const handleGameStart = async (lang: Language, diff: Difficulty) => {
@@ -103,16 +121,6 @@ function App() {
   //  Handle hint button click, request a hint from the API and show it in a toast notification
   const handleHintClick = async () => {
     await requestHint();
-    if (hint) {
-      toast({
-        title: "Hint",
-        description: hint,
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-        position: "top",
-      });
-    }
   }
 
   //  Handle reveal letter button click, call the API to reveal a letter and update the game state accordingly
@@ -183,10 +191,10 @@ function App() {
             leftIcon={<span>⚙️</span>}
             onClick={onSettingsOpen}
             variant="ghost"
-            size="sm"
+            size="lg"
             position="absolute"
             top={4}
-            right={6}
+            right={-2}
             colorScheme="blue"
           />
 
@@ -195,17 +203,17 @@ function App() {
             leftIcon={<span>❓</span>}
             onClick={onHelpOpen}
             variant="ghost"
-            size="sm"
+            size="lg"
             position="absolute"
             top={12}
-            right={6}
+            right={-2}
             colorScheme="teal"
           />
           <VStack spacing={{ base: 4, md: 6 }} maxW="800px" mx="auto" px={{ base: 2, md: 0 }}>
             <Heading as="h1" size={{ base: "xl", md: "2xl" }} color="#1a2a6c">Hangman Game</Heading>
             {/* Game status */}
             <HStack spacing={4}>
-              <Text fontSize="lg">Attempts left: {triesLeft}</Text>
+              <Text fontSize={{ base: "2xl", md: "2xl" }}>Tries left: {triesLeft}</Text>
             </HStack>
             {/* Hangman drawing */}
             <HangmanDraw incorrectGuesses={maxTries - triesLeft} difficulty={difficulty} />
@@ -219,12 +227,13 @@ function App() {
                 colorScheme="blue"
                 onClick={handleHintClick}
                 isDisabled={isGameOver}
-                size={{ base: "sm", md: "md" }}
+                size={{ base: "lg", md: "xl" }}
                 border="2px solid"
                 borderColor="blue.600"
                 bg="white"
                 color="blue.600"
                 fontWeight="bold"
+                fontSize={{ base: "lg", md: "xl" }}
                 transform={`rotate(${Math.random() * 2 - 1}deg)`}
                 boxShadow="2px 2px 0px rgba(0,0,0,0.1)"
                 sx={{ filter: 'url(#wavy-btn)' }}
@@ -233,18 +242,19 @@ function App() {
                   transform: "translateY(-1px)",
                 }}
               >
-                💡 Get Hint
+                💡Get Hint
               </Button>
               <Button
                 colorScheme="teal"
                 onClick={handleRevealLetter}
                 isDisabled={isGameOver || triesLeft <= 1}
-                size={{ base: "sm", md: "md" }}
+                size={{ base: "lg", md: "xl" }}
                 border="2px solid"
                 borderColor="teal.600"
                 bg="white"
                 color="teal.600"
                 fontWeight="bold"
+                fontSize={{ base: "lg", md: "xl" }}
                 transform={`rotate(${Math.random() * 2 - 1}deg)`}
                 boxShadow="2px 2px 0px rgba(0,0,0,0.1)"
                 sx={{ filter: 'url(#wavy-btn)' }}
@@ -258,12 +268,13 @@ function App() {
               <Button
                 colorScheme="green"
                 onClick={handleNewGame}
-                size={{ base: "sm", md: "md" }}
+                size={{ base: "lg", md: "xl" }}
                 border="2px solid"
                 borderColor="green.600"
                 bg="white"
                 color="green.600"
                 fontWeight="bold"
+                fontSize={{ base: "lg", md: "xl" }}
                 transform={`rotate(${Math.random() * 2 - 1}deg)`}
                 boxShadow="2px 2px 0px rgba(0,0,0,0.1)"
                 sx={{ filter: 'url(#wavy-btn)' }}
@@ -284,7 +295,7 @@ function App() {
                 borderWidth={2}
                 borderColor={won ? 'green.500' : 'red.500'}
               >
-                <Heading size="lg" color={won ? "green.500" : "red.500"}
+                <Heading size={{ base: "2xl", md: "2xl" }} color={won ? "green.500" : "red.500"}
                 >{won ? '🎉 You Won!' : '😢 Game Over'}</Heading>
                 <Text mt={2}>The word was: <strong>{currentWord.replace(/_/g, ' ')}</strong></Text>
               </Box>
@@ -299,7 +310,7 @@ function App() {
           currentDifficulty={difficulty}
           onLanguageChange={updateLanguage}
           onDifficultyChange={updateDifficulty}
-          onSaveAndNewGame={handleSettingsChange}  // This will receive (lang, diff)
+          onSaveAndNewGame={handleSettingsChange}
         />
         <HelpModal
           isOpen={isHelpOpen}

@@ -67,7 +67,7 @@ export const useGame = () => {
         } catch (error) {
             console.error("Error getting hint:", error);
         } finally {
-            setIsLoading(false);
+            setIsLoading(false) // Reset hint after showing it to the user
         }
     }
 
@@ -100,6 +100,10 @@ export const useGame = () => {
         setWon(false);
         setHint(null);
     }
+    // Function to reset the hint state, allowing to call the hint again
+    const resetHint = () => {
+        setHint(null);
+    }
 
     // Return all state variables and functions for use in components
     return {
@@ -120,5 +124,6 @@ export const useGame = () => {
         requestHint,
         revealLetter,
         resetGamestate,
+        resetHint,
     }
 }

@@ -1,13 +1,14 @@
 package handlers
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	game "hangman/backend/game"
 	manager "hangman/backend/session"
 	"net/http"
+	"regexp"
 	"strings"
 	"unicode"
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 var sm *manager.SessionManager
@@ -71,7 +72,7 @@ func NewGame(c *gin.Context) {
 		return
 	}
 	// Create a new game instance
-	gameInstance := game.NewGame(word.Text, word.Hint, maxAttempts)
+	gameInstance := game.NewGame(word.Text, word.Hint, maxAttempts, req.Language)
 	// Create a new session for the game
 	sessionID := sm.CreateSession(gameInstance)
 	letterCount := 0
@@ -91,6 +92,7 @@ func NewGame(c *gin.Context) {
 // MakeGuess handles a letter guess for a specific game session.
 func MakeGuess(c *gin.Context) {
 	var req GuessRequest
+
 	gameInstance, ok := getGameInstance(c)
 	if !ok {
 		return
@@ -99,6 +101,14 @@ func MakeGuess(c *gin.Context) {
 	if err := c.ShouldBindJSON(&req); err != nil || len(req.Letter) == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid guess"})
 		return
+	}
+
+	if gameInstance.Language == "ua" {
+		matched, _ := regexp.MatchString(`^[\p{Cyrillic}']$`, req.Letter)
+		if !matched {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid letter for Ukrainian language"})
+			return
+		}
 	}
 
 	letterToRunes := []rune(req.Letter)
@@ -113,8 +123,8 @@ func MakeGuess(c *gin.Context) {
 		wordStateIdx := 0
 		for _, char := range gameInstance.TargetWord {
 			if unicode.IsLetter(char) {
-					gameInstance.CurrentWordState[wordStateIdx] = string(char)
-					wordStateIdx++
+				gameInstance.CurrentWordState[wordStateIdx] = string(char)
+				wordStateIdx++
 			}
 		}
 	}

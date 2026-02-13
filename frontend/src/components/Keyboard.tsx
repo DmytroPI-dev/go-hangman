@@ -15,15 +15,15 @@ interface KeyboardProps {
 // Alphabet letters matching actual keyboard layouts
 const alphabets = {
     en: ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'],
-    ua: ['ЙЦУКЕНГШЩЗХЇҐ', 'ФІВАПРОЛДЖЄ', 'ЯЧСМИТЬБЮ'],
+    ua: ['ЙЦУКЕНГШЩЗХЇҐ', 'ФІВАПРОЛДЖЄ', "ЯЧСМИТЬБЮ'"],
     pl: ['QWERTYUIOPŻŹ', 'ASDFGHJKLŁĄ', 'ZXCVBNMŚĆĘŃ']
 }
 
 // mobile-friendly keyboard component 
 const mAlphabets = {
     en: ['QWERT', 'YUIOP', 'ASDFG', 'HJKLZ', 'XCVBNM'],
-    ua: ['ЙЦУКЕНГ', 'ШЩЗХЇҐФ', 'ІВАПРОЛ', 'ДЖЄЯЧС', 'МИТЬБЮ' ],
-    pl: ['QWERTYU', 'IOPŻŹA', 'SDFGHJK', 'LŁĄZXCVB', 'NMŚĆĘŃ']
+    ua: ['ЙЦУКЕН', 'ГШЩЗХЇ', 'ҐФІВАП', 'РОЛДЖ', 'ЯЧСМИТ',"ЇЄЬБЮ'" ],
+    pl: ['QWERTY', 'UIOPŻŹ', 'ASDFGH', 'JKLŁĄZ', 'XCVBN','MŚĆĘŃ']
 }
 
 // Component to display the alphabet buttons for guessing
@@ -42,13 +42,13 @@ function Keyboard({ language, guessedLetters, onLetterClick, disabled = false }:
                         <feTurbulence
                             type="fractalNoise"
                             baseFrequency="0.02"
-                            numOctaves="3"
+                            numOctaves="1"
                             result="noise"
                         />
                         <feDisplacementMap
                             in="SourceGraphic"
                             in2="noise"
-                            scale="14"
+                            scale="10"
                             xChannelSelector="R"
                             yChannelSelector="G"
                         />
@@ -71,11 +71,11 @@ function Keyboard({ language, guessedLetters, onLetterClick, disabled = false }:
                                         color={guessed ? "#4caf50" : "#1a2a6c"}
                                         border="2px solid"
                                         borderColor={guessed ? "#4caf50" : "#1a2a6c"}
-                                        borderRadius="4px"
-                                        size={{ base: "sm", sm: "xs", md: "md" }}
+                                        borderRadius="12px"
+                                        size={{ base: "md", sm: "lg", md: "lg" }}
                                         minW={{ base: "36px", sm: "36px", md: "48px" }}
-                                        h={{ base: "40px", sm: "32px", md: "40px" }}
-                                        fontSize={{ base: "sm", sm: "xs", md: "md" }}
+                                        h={{ base: "36px", sm: "32px", md: "40px" }}
+                                        fontSize={{ base: "md", sm: "lg", md: "md" }}
                                         fontWeight="bold"
                                         p={{ base: 1.5, sm: 1, md: 2 }}
                                         _hover={{

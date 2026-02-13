@@ -12,8 +12,8 @@ function WordDisplay({ currentWord }: WordDisplayProps) {
             {currentWord.split(" ").map((char, index) => (
                 <Box
                     key={index}
-                    w={{ base: "24px", sm: "12px", md: "40px" }}  // Smaller on mobile
-                    h={{ base: "32px", sm: "12px", md: "50px" }}
+                    w={{ base: "24px", sm: "24px", md: "40px" }}  // Smaller on mobile
+                    h={{ base: "32px", sm: "32px", md: "50px" }}
                     display="flex"
                     alignItems="center"
                     justifyContent="center"

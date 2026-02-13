@@ -17,7 +17,7 @@ type Game struct {
 	Language         string
 }
 
-func NewGame(targetWord, hint string, maxAttempts int) *Game {
+func NewGame(targetWord, hint string, maxAttempts int, language string) *Game {
     currentWordState := make([]string, 0)  
     for _, r := range targetWord {
         if unicode.IsLetter(r) {
@@ -32,6 +32,7 @@ func NewGame(targetWord, hint string, maxAttempts int) *Game {
         IncorrectGuesses: 0,
         CurrentWordState: currentWordState,
         MaxAttempts:      maxAttempts,
+        Language:         language,
     }
 }
 

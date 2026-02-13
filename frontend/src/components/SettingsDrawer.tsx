@@ -12,7 +12,8 @@ import {
     FormLabel,
     RadioGroup,
     Radio,
-    Stack
+    Stack,
+    Text
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import type { Language, Difficulty } from '../types/game'
@@ -57,24 +58,24 @@ function SettingsDrawer({
                     <VStack spacing={6} align="stretch">
                         {/* Language Selection */}
                         <FormControl>
-                            <FormLabel>Language/Język/Мова</FormLabel>
-                            <RadioGroup value={tempLanguage} onChange={(val) => setTempLanguage(val as Language)}>
+                            <FormLabel fontSize={{ base: "xl", md: "xl" }}>Language/Język/Мова</FormLabel>
+                            <RadioGroup value={tempLanguage} onChange={(val) => setTempLanguage(val as Language)} fontSize={{base :"xl", md: "xl"}}>
                                 <Stack direction="column">
-                                    <Radio value="en">🇬🇧 English</Radio>
-                                    <Radio value="ua">🇺🇦 Українська</Radio>
-                                    <Radio value="pl">🇵🇱 Polski</Radio>
+                                    <Radio value="en" size={{ base: "lg", md: "lg" }}><Text fontSize={{base: "xl", md: "xl"}} >🇬🇧 English</Text></Radio>
+                                    <Radio value="ua" size={{ base: "lg", md: "lg" }}><Text fontSize={{base: "xl", md: "xl"}}>🇺🇦 Українська</Text></Radio>
+                                    <Radio value="pl" size={{ base: "lg", md: "lg" }}><Text fontSize={{base: "xl", md: "xl"}}>🇵🇱 Polski</Text></Radio>
                                 </Stack>
                             </RadioGroup>
                         </FormControl>
 
                         {/* Difficulty Selection */}
                         <FormControl>
-                            <FormLabel>Difficulty/Trudność/Складність</FormLabel>
-                            <RadioGroup value={tempDifficulty} onChange={(val) => setTempDifficulty(val as Difficulty)}>
+                            <FormLabel fontSize={{ base: "xl", md: "xl" }}>Difficulty/Trudność/Складність</FormLabel>
+                            <RadioGroup value={tempDifficulty} onChange={(val) => setTempDifficulty(val as Difficulty)} fontSize={{base :"xl", md: "xl"}}>
                                 <Stack direction="column">
-                                    <Radio value="Easy">Easy/Łatwy/Легкий</Radio>
-                                    <Radio value="Normal">Normal/Normalny/Нормальний</Radio>
-                                    <Radio value="Hard">Hard/Trudny/Важкий</Radio>
+                                    <Radio value="Easy" size={{ base: "lg", md: "lg" }}><Text fontSize={{base: "xl", md: "xl"}}>Easy/Łatwy/Легкий</Text></Radio>
+                                    <Radio value="Normal" size={{ base: "lg", md: "lg" }}><Text fontSize={{base: "xl", md: "xl"}}>Normal/Normalny/Нормальний</Text></Radio>
+                                    <Radio value="Hard" size={{ base: "lg", md: "lg" }}><Text fontSize={{base: "xl", md: "xl"}}>Hard/Trudny/Важкий</Text></Radio>
                                 </Stack>
                             </RadioGroup>
                         </FormControl>
@@ -82,10 +83,10 @@ function SettingsDrawer({
                 </DrawerBody>
 
                 <DrawerFooter>
-                    <Button variant="outline" mr={3} onClick={onClose}>
+                    <Button variant="outline" mr={3} onClick={onClose} size={{ base: "md", md: "lg" }} fontSize={{ base: "xl", md: "xl" }}>
                         Cancel
                     </Button>
-                    <Button colorScheme="blue" onClick={handleSave}>
+                    <Button colorScheme="blue" onClick={handleSave} size={{ base: "md", md: "lg" }} fontSize={{ base: "xl", md: "xl" }}>
                         Save & New Game
                     </Button>
                 </DrawerFooter>
