@@ -47,3 +47,22 @@ go.work
 # ===== Temporary files =====
 tmp/
 temp/
+
+# ===== Wasm build   =====
+wasm/
+
+# ====== Firebase files =====
+keys/
+
+# ===== Environment variables ======
+.env
+.env.*
+
+# ===== Frontend Node modules =====
+/frontend/node_modules/
+
+# ===== Firebase hosting files =====
+/firebase.json
+.firebaserc
+firebase.json
+frontend/.firebase
