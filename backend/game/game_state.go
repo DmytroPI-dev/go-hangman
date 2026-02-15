@@ -6,34 +6,36 @@ import (
 )
 
 type Game struct {
-	TargetWord       string
-	Hint             string
-	GuessedLetters   map[rune]bool
-	IncorrectGuesses int
-	CurrentWordState []string
-	MaxAttempts      int
-	IsWordGuessed    bool
-	GetDisplayWord   string
-	Language         string
+	TargetWord         string
+	Hint               string
+	GuessedLetters     map[rune]bool
+	IncorrectGuesses   int
+	CurrentWordState   []string
+	MaxAttempts        int
+	IsWordGuessed      bool
+	GetDisplayWord     string
+	Language           string
+	OpenLetterAttempts int
 }
 
-func NewGame(targetWord, hint string, maxAttempts int, language string) *Game {
-    currentWordState := make([]string, 0)  
-    for _, r := range targetWord {
-        if unicode.IsLetter(r) {
-            currentWordState = append(currentWordState, "_")
-        }
-    }
+func NewGame(targetWord, hint string, maxAttempts int, openLetterAttempts int, language string) *Game {
+	currentWordState := make([]string, 0)
+	for _, r := range targetWord {
+		if unicode.IsLetter(r) {
+			currentWordState = append(currentWordState, "_")
+		}
+	}
 
-    return &Game{
-        TargetWord:       targetWord,
-        Hint:             hint,
-        GuessedLetters:   make(map[rune]bool),
-        IncorrectGuesses: 0,
-        CurrentWordState: currentWordState,
-        MaxAttempts:      maxAttempts,
-        Language:         language,
-    }
+	return &Game{
+		TargetWord:         targetWord,
+		Hint:               hint,
+		GuessedLetters:     make(map[rune]bool),
+		IncorrectGuesses:   0,
+		CurrentWordState:   currentWordState,
+		MaxAttempts:        maxAttempts,
+		Language:           language,
+		OpenLetterAttempts: openLetterAttempts,
+	}
 }
 
 func (g *Game) MakeGuess(letter rune) bool {

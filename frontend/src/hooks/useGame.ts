@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { Language, Difficulty } from "../types/game";
-import { createNewGame, makeGuess as apiMakeGuess, getHint, revealLetter as apiRevealLetter } from "../services/gameApi";
+import { createNewGame, makeGuess as apiMakeGuess, getHint, openLetter as apiOpenLetter } from "../services/gameApi";
 
 // Custom hook to manage game state and interactions with the Hangman game API
 export const useGame = () => {
@@ -11,6 +11,8 @@ export const useGame = () => {
     const [difficulty, setDifficulty] = useState<Difficulty>("Easy");
     const [currentWord, setCurrentWord] = useState<string>("");
     const [triesLeft, setTriesLeft] = useState<number>(0);
+    const [openLetterAttempts, setOpenLetterAttempts] = useState<number>(0);
+    const [letter, setLetter] = useState<string>("");
     const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
     const [isGameOver, setIsGameOver] = useState<boolean>(false);
     const [won, setWon] = useState<boolean>(false);
@@ -31,6 +33,7 @@ export const useGame = () => {
             setIsGameOver(false);
             setWon(false);
             setHint(null);
+            setOpenLetterAttempts(response.open_letter_attempts);
             setIsLoading(false);
         } catch (error) {
             console.error("Error starting new game:", error);
@@ -71,18 +74,20 @@ export const useGame = () => {
         }
     }
 
-    //  Function to reveal a letter by calling the API and treating it as a guess to update game state accordingly
-    const revealLetter = async () => {
+    //  Function to openLetter a letter by calling the API and treating it as a guess to update game state accordingly
+    const openLetter = async () => {
         if (!sessionId || isGameOver) return;
         setIsLoading(true);
         try {
-            const response = await apiRevealLetter(sessionId);
+            const response = await apiOpenLetter(sessionId);
             setCurrentWord(response.current_word);
             setTriesLeft(response.tries_left);
+            setOpenLetterAttempts((prev) => prev - 1);
+            setGuessedLetters((prev) => [...prev, letter]);
             setIsGameOver(response.is_game_over);
             setWon(response.won);
         } catch (error) {
-            console.error("Error revealing letter:", error);
+            console.error("Error openLettering letter:", error);
         } finally {
             setIsLoading(false);
         }
@@ -95,6 +100,8 @@ export const useGame = () => {
         setDifficulty("Easy");
         setCurrentWord("");
         setTriesLeft(0);
+        setOpenLetterAttempts(0);
+        setLetter("");
         setGuessedLetters([]);
         setIsGameOver(false);
         setWon(false);
@@ -113,6 +120,8 @@ export const useGame = () => {
         difficulty,
         currentWord,
         triesLeft,
+        openLetterAttempts,
+        letter,
         guessedLetters,
         isGameOver,
         won,
@@ -122,7 +131,7 @@ export const useGame = () => {
         startNewGame,
         makeGuess,
         requestHint,
-        revealLetter,
+        openLetter,
         resetGamestate,
         resetHint,
     }

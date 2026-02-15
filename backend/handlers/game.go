@@ -23,9 +23,10 @@ type NewGameRequest struct {
 }
 
 type NewGameResponse struct {
-	SessionID   uuid.UUID `json:"session_id"`
-	WordLength  int       `json:"word_length"`
-	MaxAttempts int       `json:"max_attempts"`
+	SessionID          uuid.UUID `json:"session_id"`
+	WordLength         int       `json:"word_length"`
+	MaxAttempts        int       `json:"max_attempts"`
+	OpenLetterAttempts int       `json:"open_letter_attempts"`
 }
 
 type GuessRequest struct {
@@ -55,15 +56,21 @@ func NewGame(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
-	// Determine max attempts based on difficulty
-	var maxAttempts int
+	// Determine max attempts and openLetter attempts based on difficulty
+	var maxAttempts, openLetterAttempts int
 	switch req.Difficulty {
 	case "Hard":
 		maxAttempts = 3
+		openLetterAttempts = 0
 	case "Normal":
 		maxAttempts = 5
+		openLetterAttempts = 1
+	case "Easy":
+		maxAttempts = 7
+		openLetterAttempts = 2
 	default:
 		maxAttempts = 7
+		openLetterAttempts = 2
 	}
 
 	word, err := game.FetchRandomWord(req.Language)
@@ -72,7 +79,7 @@ func NewGame(c *gin.Context) {
 		return
 	}
 	// Create a new game instance
-	gameInstance := game.NewGame(word.Text, word.Hint, maxAttempts, req.Language)
+	gameInstance := game.NewGame(word.Text, word.Hint, maxAttempts, openLetterAttempts, req.Language)
 	// Create a new session for the game
 	sessionID := sm.CreateSession(gameInstance)
 	letterCount := 0
@@ -82,9 +89,10 @@ func NewGame(c *gin.Context) {
 		}
 	}
 	resp := NewGameResponse{
-		SessionID:   sessionID,
-		WordLength:  letterCount,
-		MaxAttempts: maxAttempts,
+		SessionID:          sessionID,
+		WordLength:         letterCount,
+		MaxAttempts:        maxAttempts,
+		OpenLetterAttempts: openLetterAttempts,
 	}
 	c.JSON(http.StatusOK, resp)
 }
@@ -119,7 +127,7 @@ func MakeGuess(c *gin.Context) {
 	isWon := game.IsWordGuessed(gameInstance.CurrentWordState, gameInstance.TargetWord)
 
 	if isGameOver && !isWon {
-		// If the game is over and the player lost, reveal the word
+		// If the game is over and the player lost, openLetter the word
 		wordStateIdx := 0
 		for _, char := range gameInstance.TargetWord {
 			if unicode.IsLetter(char) {
@@ -168,8 +176,8 @@ func GetHint(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"hint": gameInstance.Hint})
 }
 
-// RevealLetter reveals one unguessed letter from the target word in a specific game session.
-func RevealLetter(c *gin.Context) {
+// OpenLetter opens one unguessed letter from the target word in a specific game session.
+func OpenLetter(c *gin.Context) {
 	gameInstance, ok := getGameInstance(c)
 	if !ok {
 		return
@@ -179,12 +187,17 @@ func RevealLetter(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "No more attempts left"})
 		return
 	}
+	if gameInstance.OpenLetterAttempts <= 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "No more open letter attempts left"})
+		return
+	}
 
-	// Reveal one letter and increment incorrect guesses
+	// OpenLetter one letter and increment incorrect guesses
 	for i, char := range gameInstance.TargetWord {
 		if gameInstance.CurrentWordState[i] == "_" && unicode.IsLetter(char) {
 			gameInstance.CurrentWordState[i] = string(char)
 			gameInstance.IncorrectGuesses++
+			gameInstance.OpenLetterAttempts--
 			break
 		}
 	}
@@ -192,7 +205,7 @@ func RevealLetter(c *gin.Context) {
 	isGameOver := gameInstance.IsGameOver()
 	isWon := game.IsWordGuessed(gameInstance.CurrentWordState, gameInstance.TargetWord)
 
-	// Same reveal logic as MakeGuess
+	// Same openLetter logic as MakeGuess
 	if isGameOver && !isWon {
 		wordStateIdx := 0
 		for _, char := range gameInstance.TargetWord {

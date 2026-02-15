@@ -34,7 +34,7 @@ function HelpModal({ isOpen, onClose }: HelpModalProps) {
                         <Box>
                             <Text fontSize={{ base: "xl", md: "xl" }}>
                                 Guess the hidden word one letter at a time. Each wrong guess costs one attempt.
-                                Win by revealing the full word before running out of attempts!
+                                Win by openLettering the full word before running out of attempts!
                             </Text>
                         </Box>
 
@@ -42,7 +42,7 @@ function HelpModal({ isOpen, onClose }: HelpModalProps) {
                         <Box>
                             <Heading size="sm" mb={2} fontSize={{ base: "xl", md: "xl" }}>⚙️ Difficulty Levels</Heading>
                             <UnorderedList fontSize={{ base: "xl", md: "xl" }} spacing={1}>
-                                <ListItem><strong>Easy:</strong> 7 attempts</ListItem>
+                                <ListItem><strong>Easy:</strong> 7 attempts </ListItem>
                                 <ListItem><strong>Normal:</strong> 5 attempts</ListItem>
                                 <ListItem><strong>Hard:</strong> 3 attempts</ListItem>
                             </UnorderedList>
@@ -53,7 +53,7 @@ function HelpModal({ isOpen, onClose }: HelpModalProps) {
                             <Heading size="sm" mb={2} fontSize={{ base: "xl", md: "xl" }}>💡 Special Actions</Heading>
                             <UnorderedList fontSize={{ base: "xl", md: "xl" }} spacing={1}>
                                 <ListItem><strong>Get Hint:</strong> Request a hint to help you guess the word.</ListItem>
-                                <ListItem><strong>Reveal Letter:</strong> Reveal a letter in the word to make guessing easier, costs 1 attempt.</ListItem>
+                                <ListItem><strong>Open Letter:</strong> Open a letter in the word to make guessing easier, costs 1 attempt. You can openLetter 2 letters for Easy, and 1 for Normal. In Hard mode, this action is not available.</ListItem>
                             </UnorderedList>
                         </Box>
 

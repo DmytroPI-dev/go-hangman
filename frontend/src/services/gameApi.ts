@@ -31,8 +31,8 @@ export const getHint = async (sessionId: string): Promise<string> => {
     return response.data.hint;
 }
 
-export const revealLetter = async (sessionId: string): Promise<GuessResponse> => {
-    const response = await axios.post<GuessResponse>(`${API_BASE_URL}/api/game/${sessionId}/reveal`);
+export const openLetter = async (sessionId: string): Promise<GuessResponse> => {
+    const response = await axios.post<GuessResponse>(`${API_BASE_URL}/api/game/${sessionId}/open_letter_attempts`);
     return response.data;
 }
 

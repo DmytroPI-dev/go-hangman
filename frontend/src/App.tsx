@@ -1,4 +1,4 @@
-import { Box, VStack, HStack, Button, Text, Heading, useToast, Spinner } from "@chakra-ui/react";
+import { Box, VStack, HStack, Button, Text, Heading, useToast, Spinner} from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { workbookPageStyles, redMarginStyles } from "./theme/workBookTheme";
 import { useGame } from "./hooks/useGame";
@@ -26,17 +26,18 @@ function App() {
     sessionId,
     currentWord,
     triesLeft,
+    openLetterAttempts,
     guessedLetters,
     isGameOver,
     won,
     isLoading,
     hint,
-    resetHint,
     startNewGame,
     makeGuess,
     requestHint,
-    revealLetter,
+    openLetter,
     resetGamestate,
+    resetHint,
   } = useGame();
 
   const maxTries = (() => {
@@ -113,7 +114,7 @@ function App() {
     await startNewGame(newLang, newDiff);
   }
 
-  //  Functions to handle letter clicks, hint requests, letter reveal, and new game button clicks, calling corresponding functions from useGame hook and showing toast for hints
+  //  Functions to handle letter clicks, hint requests, letter openLetter, and new game button clicks, calling corresponding functions from useGame hook and showing toast for hints
   const handleLetterClick = async (letter: string) => {
     await makeGuess(letter.toLocaleLowerCase());
   }
@@ -123,9 +124,9 @@ function App() {
     await requestHint();
   }
 
-  //  Handle reveal letter button click, call the API to reveal a letter and update the game state accordingly
-  const handleRevealLetter = async () => {
-    await revealLetter();
+  //  Handle openLetter letter button click, call the API to openLetter a letter and update the game state accordingly
+  const handleOpenLetter = async () => {
+    await openLetter();
   }
 
   //  Handle new game button click, reset the game state and start a new game with the current settings
@@ -214,6 +215,9 @@ function App() {
             {/* Game status */}
             <HStack spacing={4}>
               <Text fontSize={{ base: "2xl", md: "2xl" }}>Tries left: {triesLeft}</Text>
+              {difficulty !== "Hard" && (
+                <Text fontSize={{ base: "2xl", md: "2xl" }}>Can open letters: {openLetterAttempts}</Text>
+              )}
             </HStack>
             {/* Hangman drawing */}
             <HangmanDraw incorrectGuesses={maxTries - triesLeft} difficulty={difficulty} />
@@ -244,47 +248,49 @@ function App() {
               >
                 💡Get Hint
               </Button>
-              <Button
-                colorScheme="teal"
-                onClick={handleRevealLetter}
-                isDisabled={isGameOver || triesLeft <= 1}
-                size={{ base: "lg", md: "xl" }}
-                border="2px solid"
-                borderColor="teal.600"
-                bg="white"
-                color="teal.600"
-                fontWeight="bold"
-                fontSize={{ base: "lg", md: "xl" }}
-                transform={`rotate(${Math.random() * 2 - 1}deg)`}
-                boxShadow="2px 2px 0px rgba(0,0,0,0.1)"
-                sx={{ filter: 'url(#wavy-btn)' }}
-                _hover={{
-                  bg: "teal.50",
-                  transform: "translateY(-1px)",
-                }}
-              >
-                🔍 Reveal Letter
-              </Button>
-              <Button
-                colorScheme="green"
-                onClick={handleNewGame}
-                size={{ base: "lg", md: "xl" }}
-                border="2px solid"
-                borderColor="green.600"
-                bg="white"
-                color="green.600"
-                fontWeight="bold"
-                fontSize={{ base: "lg", md: "xl" }}
-                transform={`rotate(${Math.random() * 2 - 1}deg)`}
-                boxShadow="2px 2px 0px rgba(0,0,0,0.1)"
-                sx={{ filter: 'url(#wavy-btn)' }}
-                _hover={{
-                  bg: "green.50",
-                  transform: "translateY(-1px)",
-                }}
-              >
-                🎮 New Game
-              </Button>
+                {difficulty !== "Hard" && (
+                  <Button
+                    colorScheme="teal"
+                    onClick={handleOpenLetter}
+                    isDisabled={isGameOver || triesLeft <= 1 || openLetterAttempts <= 0}
+                    size={{ base: "lg", md: "xl" }}
+                    border="2px solid"
+                    borderColor="teal.600"
+                    bg="white"
+                    color="teal.600"
+                    fontWeight="bold"
+                    fontSize={{ base: "lg", md: "xl" }}
+                    transform={`rotate(${Math.random() * 2 - 1}deg)`}
+                    boxShadow="2px 2px 0px rgba(0,0,0,0.1)"
+                    sx={{ filter: 'url(#wavy-btn)' }}
+                    _hover={{
+                      bg: "teal.50",
+                      transform: "translateY(-1px)",
+                    }}
+                  >
+                    🔍 Open Letter
+                  </Button>
+                )}
+                <Button
+                  colorScheme="green"
+                  onClick={handleNewGame}
+                  size={{ base: "lg", md: "xl" }}
+                  border="2px solid"
+                  borderColor="green.600"
+                  bg="white"
+                  color="green.600"
+                  fontWeight="bold"
+                  fontSize={{ base: "lg", md: "xl" }}
+                  transform={`rotate(${Math.random() * 2 - 1}deg)`}
+                  boxShadow="2px 2px 0px rgba(0,0,0,0.1)"
+                  sx={{ filter: 'url(#wavy-btn)' }}
+                  _hover={{
+                    bg: "green.50",
+                    transform: "translateY(-1px)",
+                  }}
+                >
+                  🎮 New Game
+                </Button>
             </HStack>
             {/* Game over message */}
             {isGameOver && (

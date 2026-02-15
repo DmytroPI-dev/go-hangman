@@ -8,6 +8,7 @@ export type NewGameResponse = {
     session_id: string
     word_length: number
     max_attempts: number
+    open_letter_attempts: number
 }
 
 export type GuessRequest = {
@@ -27,8 +28,9 @@ export type GameState = {
     tries_left: number
     is_game_over: boolean
     won: boolean
+    open_letter_attempts: number
 }
 
 export type Language = "en" | "ua" | "pl"
-  
+
 export type Difficulty = "Easy" | "Normal" | "Hard"
