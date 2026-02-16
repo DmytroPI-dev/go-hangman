@@ -27,14 +27,6 @@ jobs:
       - name: Build
         working-directory: ./frontend
         run: npm run build
-      - name: Debug File System
-        run: |
-          echo "Listing root directory:"
-          ls -la
-          echo "Listing frontend directory:"
-          ls -la frontend
-          echo "Listing frontend/dist directory:"
-          ls -la frontend/dist
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
