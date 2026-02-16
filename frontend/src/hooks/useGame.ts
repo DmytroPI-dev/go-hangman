@@ -86,6 +86,9 @@ export const useGame = () => {
             setGuessedLetters((prev) => [...prev, letter]);
             setIsGameOver(response.is_game_over);
             setWon(response.won);
+            if (response.opened_letter) {
+                setGuessedLetters((prev) => [...prev, response.opened_letter!]);
+            }
         } catch (error) {
             console.error("Error openLettering letter:", error);
         } finally {
