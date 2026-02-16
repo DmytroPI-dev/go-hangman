@@ -1,0 +1,62 @@
+{
+    "game": {
+        "title": "Gra Wisielec",
+        "attemptsLeft": "Pozostało prób: {{count}}",
+        "youWon": "Wygrałeś! 🎉",
+        "gameOver": "Koniec gry! 😢",
+        "newGame": "Nowa gra",
+        "getHint": "Otrzymaj wskazówkę",
+        "openLetter": "Otwórz literę",
+        "hintReceived": "Wskazówka otrzymana!",
+        "letterOpened": "Litera otwarta!",
+        "theWordWas": "Słowo to było",
+        "openLetterAttempts": "Można otworzyć {{count}} liter",
+        "selectLanguage": "Wybierz język",
+        "selectDifficulty": "Wybierz poziom trudności",
+        "setupTitle": "Ustawienia gry",
+        "languages": {
+            "english": "Angielski",
+            "ukrainian": "Ukraiński",
+            "polish": "Polski"
+        },
+        "difficulties": {
+            "easy": "Łatwy",
+            "normal": "Normalny",
+            "hard": "Trudny"
+        },
+        "startGame": "Rozpocznij grę"
+    },
+    "settings": {
+        "title": "Ustawienia gry",
+        "language": "Język",
+        "difficulty": "Poziom trudności",
+        "saveAndNewGame": "Zapisz i nowa gra",
+        "cancel": "Anuluj",
+        "difficulties": {
+            "easy": "Łatwy",
+            "normal": "Normalny",
+            "hard": "Trudny"
+        }
+    },
+    "help": {
+        "howToPlay": "Jak grać",
+        "rules": "Odgadnij słowo, wybierając litery. Masz ograniczoną liczbę prób. Używaj wskazówek mądrze!",
+        "difficultyLevels": "Poziomy trudności",
+        "difficulties": {
+            "easy": "Łatwy",
+            "normal": "Normalny",
+            "hard": "Trudny"
+        },
+        "getHint": "Otrzymaj wskazówkę",
+        "attempts": "Próby",
+        "openLetter": "Otwórz literę",
+        "gotIt": "Rozumiem!",
+        "hintDescription": "Użyj wskazówki, aby uzyskać podpowiedź dotyczącą słowa. Możesz otwierać wskazówkę tyle razy, ile chcesz, ponieważ jest tylko jedna wskazówka na słowo",
+        "openLetterDescription": "Otwórz literę, aby odsłonić jedną z ukrytych liter w słowie. Możesz otworzyć 2 litery na poziomie łatwym, 1 literę na normalnym i żadnej na trudnym. Używaj tej opcji mądrze! Każda otwarta litera będzie kosztować 1 próbę.",
+        "newGame": "Nowa gra",
+        "newGameDescription": "Rozpocznij nową grę z tymi samymi ustawieniami. Użyj tej opcji, jeśli chcesz zagrać ponownie bez zmiany języka lub poziomu trudności.",
+        "usingKeyboard": "Używanie klawiatury",
+        "keyboardDescription": "Możesz także grać za pomocą klawiatury! Po prostu wpisuj litery, które chcesz odgadnąć",
+        "controls": "Sterowanie"
+    }
+}

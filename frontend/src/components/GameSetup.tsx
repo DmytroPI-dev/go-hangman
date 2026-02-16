@@ -16,31 +16,28 @@ function GameSetup({ onGameStart }: GameSetupProps) {
     const handleStartGame = () => {
         onGameStart(language, difficulty)
     }
-
-    // Render the game setup form with language and difficulty selection
     return (
-
-        <VStack spacing={4}>
-            <Heading>Hangman Game Setup</Heading>
+        <VStack spacing={{base: 4, md: 6}} maxW="400px" mx="auto" px={{ base: 2, md: 0 }} mt={10}>
+            <Heading fontSize={{ base: "xl", md: "2xl", sm: "2xl" }} textAlign="center" >Settings/Налаштування/Ustawienia</Heading>
             <Box w="100%">
-                <Text mb={2}>Select Language:</Text>
-                <Select value={language} onChange={(e) => setLanguage(e.target.value as Language)}>
+                <Text mb={2} fontSize={{base: "xl", md: "2xl", sm: "xl"}}>Language/Мова/Język</Text>
+                <Select size="lg" value={language} onChange={(e) => setLanguage(e.target.value as Language)}>
                     <option value="en">English</option>
-                    <option value="ua">Ukrainian</option>
-                    <option value="pl">Polish</option>
+                    <option value="ua">Українська</option>
+                    <option value="pl">Polski</option>
                 </Select>
             </Box>
             <Box w="100%">
-                <Text mb={2}>Select Difficulty:</Text>
-                <Select value={difficulty} onChange={(e) => setDifficulty(e.target.value as Difficulty)}>
-                    <option value="Easy">Easy</option>
-                    <option value="Normal">Normal</option>
-                    <option value="Hard">Hard</option>
+                <Text mb={2} fontSize={{base: "xl", md: "2xl", sm: "xl"}}>Difficulty/Складність/Poziom trudności</Text>
+                <Select size="lg" value={difficulty} onChange={(e) => setDifficulty(e.target.value as Difficulty)}>
+                    <option value="Easy">Easy/Легка/Łatwy</option>
+                    <option value="Normal">Normal/Нормальна/Normalny</option>
+                    <option value="Hard">Hard/Важка/Trudny</option>
                 </Select>
             </Box>
             <Box w="100%" textAlign="center">
-                <Button colorScheme="blue" onClick={handleStartGame}>
-                    Start Game
+                <Button colorScheme="blue" onClick={handleStartGame} size={{ base: "lg", md: "xl" }} fontSize={{ base: "xl", md: "2xl" }}>
+                    👍
                 </Button>
             </Box >
         </VStack>

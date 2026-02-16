@@ -1,9 +1,10 @@
-import { Box, VStack, HStack, Button, Text, Heading, useToast, Spinner } from "@chakra-ui/react";
+import { Box, VStack, HStack, Stack, Button, Text, Heading, useToast, Spinner } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
 import { workbookPageStyles, redMarginStyles } from "./theme/workBookTheme";
 import { useGame } from "./hooks/useGame";
 import { useSettings } from "./hooks/useSettings";
-import { useState, useEffect, } from "react";
+import { useState, useEffect } from "react";
 import type { Difficulty, Language } from "./types/game";
 import GameSetup from "./components/GameSetup";
 import WordDisplay from "./components/WordDisplay";
@@ -12,10 +13,18 @@ import HangmanDraw from "./components/HangmanDraw";
 import Intro from "./components/Intro";
 import HelpModal from "./components/HelpModal";
 import SettingsDrawer from "./components/SettingsDrawer";
-import { base } from "framer-motion/client";
+
 
 function App() {
-  const { isFirstVisit, markIntroSeen, language, difficulty, updateLanguage, updateDifficulty } = useSettings();
+  const { i18n, t } = useTranslation();
+  const {
+    language,
+    difficulty,
+    isFirstVisit,
+    updateLanguage,
+    updateDifficulty,
+    markIntroSeen
+  } = useSettings();
   const [hasConfiguredSettings, setHasConfiguredSettings] = useState(() => {
     return language !== 'en' || difficulty !== 'Easy' || !isFirstVisit;
   });
@@ -52,13 +61,17 @@ function App() {
     }
   })();
 
+  // Change language in i18n when settings are updated
+  useEffect(() => {
+    i18n.changeLanguage(language);
+  }, [language, i18n]);
 
   // Auto-start game when settings are configured but no session exists
   useEffect(() => {
     if (!sessionId && hasConfiguredSettings && !isFirstVisit && !isLoading) {
       startNewGame(language, difficulty);
     }
-  }, [sessionId, hasConfiguredSettings, isFirstVisit, isLoading]);
+  }, [sessionId, hasConfiguredSettings, isFirstVisit, isLoading, language, difficulty]);
 
   // Keyboard event listener for letter guesses
   useEffect(() => {
@@ -89,7 +102,7 @@ function App() {
   useEffect(() => {
     if (hint) {
       toast({
-        title: "Hint",
+        title: t('game.hintReceived'),
         description: hint,
         duration: 3000,
         isClosable: true,
@@ -107,9 +120,15 @@ function App() {
   useEffect(() => {
     if (isGameOver) {
       toast({
-        title: won ? "🎉 You Won!" : "😢 Game Over",
-        description: `The word is: ${currentWord.replace(/_/g, ' ')}`,
-        duration: 5000,
+        title: won ? t('game.youWon') : t('game.gameOver'),
+        description: (
+          <Box>
+            <Text>{t('game.theWordWas')}:</Text>
+            <Text fontWeight="bold" mt={1} textAlign="center">
+              {currentWord.replace(/_/g, ' ')}
+            </Text>
+          </Box>
+        ), duration: 5000,
         isClosable: true,
         status: won ? "success" : "error",
         position: "top",
@@ -121,18 +140,22 @@ function App() {
     }
   }, [isGameOver, won, currentWord, toast]);
 
-  // Function to handle game start with selected settings, called from GameSetup component
-  const handleGameStart = async (lang: Language, diff: Difficulty) => {
-    await startNewGame(lang, diff)
-    setHasConfiguredSettings(true);
-  }
-
   // Function to handle settings changes from the SettingsDrawer, resets game state and starts a new game with updated settings
   const handleSettingsChange = async (newLang: Language, newDiff: Difficulty) => {
     resetGamestate();
     onSettingsClose();
     await startNewGame(newLang, newDiff);
   }
+
+  // Function to handle game start with selected settings, called from GameSetup component
+  const handleGameStart = async (lang: Language, diff: Difficulty) => {
+    updateLanguage(lang);
+    updateDifficulty(diff);
+    markIntroSeen();
+    await startNewGame(lang, diff)
+    setHasConfiguredSettings(true);
+  }
+
 
   //  Functions to handle letter clicks, hint requests, letter openLetter, and new game button clicks, calling corresponding functions from useGame hook and showing toast for hints
   const handleLetterClick = async (letter: string) => {
@@ -259,30 +282,30 @@ function App() {
           />
           {/* Open Letter Button for mobile */}
           {difficulty !== "Hard" && (
-          <Button
-            leftIcon={<span>🔍</span>}
-            onClick={handleOpenLetter}
-            variant="ghost"
-            marginTop={2}
-            display={{ base: "inline-flex", md: "none" }}
-            size="lg"
-            position="absolute"
-            top={36}
-            right={-2}
-            colorScheme="whiteAlpha"
+            <Button
+              leftIcon={<span>🔍</span>}
+              onClick={handleOpenLetter}
+              variant="ghost"
+              marginTop={2}
+              display={{ base: "inline-flex", md: "none" }}
+              size="lg"
+              position="absolute"
+              top={36}
+              right={-2}
+              colorScheme="whiteAlpha"
             />
           )}
           {/* Game content */}
 
-          <VStack spacing={{ base: 4, md: 6 }} maxW="800px" mx="auto" px={{ base: 2, md: 0 }}>
-            <Heading as="h1" size={{ base: "xl", md: "2xl" }} color="#1a2a6c">Hangman Game</Heading>
+          <VStack spacing={{ base: 2, md: 6 }} maxW="800px" mx="auto" px={{ base: 1, md: 0 }}>
+            <Heading as="h1" size={{ base: "xl", md: "2xl" }} color="#1a2a6c">{t('game.title')}</Heading>
             {/* Game status */}
-            <HStack spacing={4}>
-              <Text fontSize={{ base: "2xl", md: "2xl" }}>Tries left: {triesLeft}</Text>
+            <Stack spacing={{ base: 1, md: 2 }} direction={{ base: "column", md: "row" }} align="flex-start">
+              <Text fontSize={{ base: "2xl", md: "2xl" }}>{t('game.attemptsLeft', { count: triesLeft })}</Text>
               {difficulty !== "Hard" && (
-                <Text fontSize={{ base: "2xl", md: "2xl" }}>Can open letters: {openLetterAttempts}</Text>
+                <Text fontSize={{ base: "2xl", md: "2xl" }}>{t('game.openLetterAttempts', { count: openLetterAttempts })}</Text>
               )}
-            </HStack>
+            </Stack>
             {/* Hangman drawing */}
             <HangmanDraw incorrectGuesses={maxTries - triesLeft} difficulty={difficulty} />
             {/* Word display */}
@@ -294,7 +317,7 @@ function App() {
               <Button
                 colorScheme="blue"
                 onClick={handleHintClick}
-                display={{base: "none", md: "inline-flex"}}
+                display={{ base: "none", md: "inline-flex" }}
                 isDisabled={isGameOver}
                 size={{ base: "lg", md: "xl" }}
                 border="2px solid"
@@ -311,7 +334,7 @@ function App() {
                   transform: "translateY(-1px)",
                 }}
               >
-                💡Get Hint
+                💡{t('game.getHint')}
               </Button>
               {difficulty !== "Hard" && (
                 <Button
@@ -334,12 +357,12 @@ function App() {
                     transform: "translateY(-1px)",
                   }}
                 >
-                  🔍 Open Letter
+                  🔍 {t('game.openLetter')}
                 </Button>
               )}
               <Button
                 colorScheme="green"
-                display= {{ base: "none", md: "inline-flex" }}
+                display={{ base: "none", md: "inline-flex" }}
                 onClick={handleNewGame}
                 size={{ base: "lg", md: "xl" }}
                 border="2px solid"
@@ -356,7 +379,7 @@ function App() {
                   transform: "translateY(-1px)",
                 }}
               >
-                🎮 New Game
+                🎮 {t('game.newGame')}
               </Button>
             </HStack>
           </VStack>

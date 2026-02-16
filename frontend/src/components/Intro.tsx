@@ -11,6 +11,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, easeInOut } from 'framer-motion';
 
 
+
 // --- ANIMATION VARIANTS ---
 const drawPath = {
     hidden: { pathLength: 0, opacity: 0 },
