@@ -1,0 +1,62 @@
+{
+    "game": {
+        "title": "Hangman Game",
+        "attemptsLeft": "Attempts left: {{count}}",
+        "youWon": "You Won! 🎉",
+        "gameOver": "Game Over! 😢",
+        "newGame": "New Game",
+        "getHint": "Get Hint",
+        "openLetter": "Open Letter",
+        "hintReceived": "Hint Received!",
+        "letterOpened": "Letter Opened!",
+        "theWordWas": "The word was",
+        "openLetterAttempts": "Can open {{count}} letters",
+        "selectLanguage": "Select Language",
+        "selectDifficulty": "Select Difficulty",
+        "setupTitle": "Game Setup",
+        "languages": {
+            "english": "English",
+            "ukrainian": "Ukrainian",
+            "polish": "Polish"
+        },
+        "difficulties": {
+            "easy": "Easy",
+            "normal": "Normal",
+            "hard": "Hard"
+        },
+        "startGame": "Start Game"
+    },
+    "settings": {
+        "title": "Game Settings",
+        "language": "Language",
+        "difficulty": "Difficulty",
+        "saveAndNewGame": "Save & New Game",
+        "cancel": "Cancel",
+        "difficulties": {
+            "easy": "Easy",
+            "normal": "Normal",
+            "hard": "Hard"
+        }
+    },
+    "help": {
+        "howToPlay": "How to Play",
+        "rules": "Guess the word by selecting letters. You have a limited number of attempts. Use hints wisely!",
+        "difficultyLevels": "Difficulty Levels",
+        "difficulties": {
+            "easy": "Easy",
+            "normal": "Normal",
+            "hard": "Hard"
+        },
+        "getHint": "Get Hint",
+        "attempts": "Attempts",
+        "openLetter": "Open Letter",
+        "gotIt": "Got it!",
+        "hintDescription": "Use a hint to get a clue about the word. You can open hint as many times as you want, as there is only one hint per word",
+        "openLetterDescription": "Open a letter to reveal one of the hidden letters in the word. You can open 2 letters on Easy, 1 letter on Normal and no letters on Hard difficulty. Use this option wisely! Each open letter will cost you 1 attempt.",
+        "newGame": "New Game",
+        "newGameDescription": "Start a new game with the same settings. Use this option if you want to play again without changing the language or difficulty.",
+        "usingKeyboard": "Using Keyboard",
+        "keyboardDescription": "You can also play using your keyboard! Just type the letters you want to guess",
+        "controls": "Controls"
+    }
+}

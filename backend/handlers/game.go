@@ -1,14 +1,14 @@
 package handlers
 
 import (
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	game "hangman/backend/game"
 	manager "hangman/backend/session"
 	"net/http"
 	"regexp"
 	"strings"
 	"unicode"
-	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 var sm *manager.SessionManager
@@ -39,6 +39,7 @@ type GuessResponse struct {
 	TriesLeft   int    `json:"tries_left"`
 	IsGameOver  bool   `json:"is_game_over"`
 	IsWon       bool   `json:"won"`
+	OpenedLetter string `json:"opened_letter,omitempty"`
 }
 
 type GameStateResponse struct {
@@ -127,14 +128,7 @@ func MakeGuess(c *gin.Context) {
 	isWon := game.IsWordGuessed(gameInstance.CurrentWordState, gameInstance.TargetWord)
 
 	if isGameOver && !isWon {
-		// If the game is over and the player lost, openLetter the word
-		wordStateIdx := 0
-		for _, char := range gameInstance.TargetWord {
-			if unicode.IsLetter(char) {
-				gameInstance.CurrentWordState[wordStateIdx] = string(char)
-				wordStateIdx++
-			}
-		}
+		openAllLetters(gameInstance)
 	}
 
 	resp := GuessResponse{
@@ -143,6 +137,7 @@ func MakeGuess(c *gin.Context) {
 		TriesLeft:   gameInstance.MaxAttempts - gameInstance.IncorrectGuesses,
 		IsGameOver:  isGameOver,
 		IsWon:       isWon,
+		OpenedLetter: string(letter),
 	}
 	c.JSON(http.StatusOK, resp)
 }
@@ -178,6 +173,7 @@ func GetHint(c *gin.Context) {
 
 // OpenLetter opens one unguessed letter from the target word in a specific game session.
 func OpenLetter(c *gin.Context) {
+	var openedLetter string
 	gameInstance, ok := getGameInstance(c)
 	if !ok {
 		return
@@ -192,28 +188,24 @@ func OpenLetter(c *gin.Context) {
 		return
 	}
 
-	// OpenLetter one letter and increment incorrect guesses
-	for i, char := range gameInstance.TargetWord {
-		if gameInstance.CurrentWordState[i] == "_" && unicode.IsLetter(char) {
-			gameInstance.CurrentWordState[i] = string(char)
-			gameInstance.IncorrectGuesses++
-			gameInstance.OpenLetterAttempts--
-			break
-		}
+	// Find the first closed letter to open
+	openedLetter = findLetterToOpen(gameInstance)
+	if openedLetter == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "No letters to open"})
+		return
 	}
 
+	// Open all occurrences of the opened letter
+	openAllSameClosedLetters(gameInstance, openedLetter)
+	gameInstance.GuessedLetters[rune(openedLetter[0])] = true
+	gameInstance.OpenLetterAttempts--
+	gameInstance.IncorrectGuesses++
 	isGameOver := gameInstance.IsGameOver()
 	isWon := game.IsWordGuessed(gameInstance.CurrentWordState, gameInstance.TargetWord)
 
-	// Same openLetter logic as MakeGuess
+	// If the game is over and the player has lost, open all remaining letters to reveal the word.
 	if isGameOver && !isWon {
-		wordStateIdx := 0
-		for _, char := range gameInstance.TargetWord {
-			if unicode.IsLetter(char) {
-				gameInstance.CurrentWordState[wordStateIdx] = string(char)
-				wordStateIdx++
-			}
-		}
+		openAllLetters(gameInstance)
 	}
 
 	resp := GuessResponse{
@@ -222,8 +214,43 @@ func OpenLetter(c *gin.Context) {
 		TriesLeft:   gameInstance.MaxAttempts - gameInstance.IncorrectGuesses,
 		IsGameOver:  isGameOver,
 		IsWon:       isWon,
+		OpenedLetter: openedLetter,
 	}
 	c.JSON(http.StatusOK, resp)
+}
+
+// openAllLetters is a helper function that opens all letters in the target word, used when the game is over and the player has lost.
+func openAllLetters(gameInstance *game.Game) {
+	stateIndex := 0
+	for _, char := range gameInstance.TargetWord {
+		if unicode.IsLetter(char) {
+			gameInstance.CurrentWordState[stateIndex] = string(char)
+			stateIndex++
+		}
+	}
+}
+
+// findLetterToOpen is a helper function that finds the first closed letter in the target word and returns it.
+func findLetterToOpen(gameInstance *game.Game) string {
+	for i, char := range gameInstance.TargetWord {
+		if gameInstance.CurrentWordState[i] == "_" && unicode.IsLetter(char) {
+			return string(char)
+		}
+	}
+	return ""
+}
+
+// openAllSameClosedLetters is a helper function that opens all occurrences of a specific letter in the target word.
+func openAllSameClosedLetters(gameInstance *game.Game, letter string) {
+	stateIndex := 0
+	for _, char := range gameInstance.TargetWord {
+		if unicode.IsLetter(char) && string(char) == letter {
+			gameInstance.CurrentWordState[stateIndex] = string(char)
+		}
+		if unicode.IsLetter(char) {
+			stateIndex++
+		}
+	}
 }
 
 // getGameInstance is a helper function to extract, validate, and retrieve
@@ -231,7 +258,7 @@ func OpenLetter(c *gin.Context) {
 func getGameInstance(c *gin.Context) (*game.Game, bool) {
 	sessionIDStr := c.Param("session_id")
 
-	// 1. Parse UUID
+	// 1. Parse session UUID
 	sessionID, err := uuid.Parse(sessionIDStr)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid session ID"})

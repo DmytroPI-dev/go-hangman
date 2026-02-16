@@ -38,24 +38,24 @@ func NewGame(targetWord, hint string, maxAttempts int, openLetterAttempts int, l
 	}
 }
 
-func (g *Game) MakeGuess(letter rune) bool {
+func (gameInstance *Game) MakeGuess(letter rune) bool {
 	letter = unicode.ToLower(letter)
 
-	if g.GuessedLetters[letter] {
+	if gameInstance.GuessedLetters[letter] {
 		return false
 	}
-	g.GuessedLetters[letter] = true
+	gameInstance.GuessedLetters[letter] = true
 
 	correctGuess := false
-	targetRunes := []rune(g.TargetWord)
+	targetRunes := []rune(gameInstance.TargetWord)
 	for i, char := range targetRunes {
 		if unicode.ToLower(char) == letter {
-			g.CurrentWordState[i] = string(char)
+			gameInstance.CurrentWordState[i] = string(char)
 			correctGuess = true
 		}
 	}
 	if !correctGuess {
-		g.IncorrectGuesses++
+		gameInstance.IncorrectGuesses++
 	}
 	return correctGuess
 }
@@ -64,10 +64,10 @@ func IsWordGuessed(guessed []string, word string) bool {
 	return strings.Join(guessed, "") == word
 }
 
-func (g *Game) IsGameOver() bool {
-	return g.IncorrectGuesses >= g.MaxAttempts || IsWordGuessed(g.CurrentWordState, g.TargetWord)
+func (gameInstance *Game) IsGameOver() bool {
+	return gameInstance.IncorrectGuesses >= gameInstance.MaxAttempts || IsWordGuessed(gameInstance.CurrentWordState, gameInstance.TargetWord)
 }
 
-func GetDisplayWord(g *Game) string {
-	return strings.Join(g.CurrentWordState, " ")
+func GetDisplayWord(gameInstance *Game) string {
+	return strings.Join(gameInstance.CurrentWordState, " ")
 }

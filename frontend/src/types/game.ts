@@ -21,6 +21,7 @@ export type GuessResponse = {
     tries_left: number
     is_game_over: boolean
     won: boolean
+    opened_letter?: string
 }
 
 export type GameState = {
@@ -29,6 +30,7 @@ export type GameState = {
     is_game_over: boolean
     won: boolean
     open_letter_attempts: number
+    opened_letter?: string
 }
 
 export type Language = "en" | "ua" | "pl"

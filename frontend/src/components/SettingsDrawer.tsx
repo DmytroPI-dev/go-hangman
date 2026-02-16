@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import type { Language, Difficulty } from '../types/game'
+import { useTranslation } from 'react-i18next'
 
 interface SettingsDrawerProps {
     isOpen: boolean
@@ -39,6 +40,7 @@ function SettingsDrawer({
 }: SettingsDrawerProps) {
     const [tempLanguage, setTempLanguage] = useState(currentLanguage)
     const [tempDifficulty, setTempDifficulty] = useState(currentDifficulty)
+    const { t } = useTranslation();
 
     const handleSave = () => {
         onLanguageChange(tempLanguage)
@@ -52,13 +54,13 @@ function SettingsDrawer({
             <DrawerOverlay />
             <DrawerContent>
                 <DrawerCloseButton />
-                <DrawerHeader>Game Settings</DrawerHeader>
+                <DrawerHeader>{t('settings.title')}</DrawerHeader>
 
                 <DrawerBody>
                     <VStack spacing={6} align="stretch">
                         {/* Language Selection */}
                         <FormControl>
-                            <FormLabel fontSize={{ base: "xl", md: "xl" }}>Language/Język/Мова</FormLabel>
+                            <FormLabel fontSize={{ base: "xl", md: "xl" }}>{t('settings.language')}</FormLabel>
                             <RadioGroup value={tempLanguage} onChange={(val) => setTempLanguage(val as Language)} fontSize={{base :"xl", md: "xl"}}>
                                 <Stack direction="column">
                                     <Radio value="en" size={{ base: "lg", md: "lg" }}><Text fontSize={{base: "xl", md: "xl"}} >🇬🇧 English</Text></Radio>
@@ -70,12 +72,12 @@ function SettingsDrawer({
 
                         {/* Difficulty Selection */}
                         <FormControl>
-                            <FormLabel fontSize={{ base: "xl", md: "xl" }}>Difficulty/Trudność/Складність</FormLabel>
+                            <FormLabel fontSize={{ base: "xl", md: "xl" }}>{t('settings.difficulty')}</FormLabel>
                             <RadioGroup value={tempDifficulty} onChange={(val) => setTempDifficulty(val as Difficulty)} fontSize={{base :"xl", md: "xl"}}>
                                 <Stack direction="column">
-                                    <Radio value="Easy" size={{ base: "lg", md: "lg" }}><Text fontSize={{base: "xl", md: "xl"}}>Easy/Łatwy/Легкий</Text></Radio>
-                                    <Radio value="Normal" size={{ base: "lg", md: "lg" }}><Text fontSize={{base: "xl", md: "xl"}}>Normal/Normalny/Нормальний</Text></Radio>
-                                    <Radio value="Hard" size={{ base: "lg", md: "lg" }}><Text fontSize={{base: "xl", md: "xl"}}>Hard/Trudny/Важкий</Text></Radio>
+                                    <Radio value="Easy" size={{ base: "lg", md: "lg" }}><Text fontSize={{base: "xl", md: "xl"}}>{t('settings.difficulties.easy')}</Text></Radio>
+                                    <Radio value="Normal" size={{ base: "lg", md: "lg" }}><Text fontSize={{base: "xl", md: "xl"}}>{t('settings.difficulties.normal')}</Text></Radio>
+                                    <Radio value="Hard" size={{ base: "lg", md: "lg" }}><Text fontSize={{base: "xl", md: "xl"}}>{t('settings.difficulties.hard')}</Text></Radio>
                                 </Stack>
                             </RadioGroup>
                         </FormControl>
@@ -84,10 +86,10 @@ function SettingsDrawer({
 
                 <DrawerFooter>
                     <Button variant="outline" mr={3} onClick={onClose} size={{ base: "md", md: "lg" }} fontSize={{ base: "xl", md: "xl" }}>
-                        Cancel
+                        {t('settings.cancel')}
                     </Button>
                     <Button colorScheme="blue" onClick={handleSave} size={{ base: "md", md: "lg" }} fontSize={{ base: "xl", md: "xl" }}>
-                        Save & New Game
+                        {t('settings.saveAndNewGame')}
                     </Button>
                 </DrawerFooter>
             </DrawerContent>

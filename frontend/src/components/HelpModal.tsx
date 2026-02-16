@@ -14,6 +14,7 @@ import {
     UnorderedList,
     ListItem
 } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 interface HelpModalProps {
     isOpen: boolean
@@ -21,11 +22,12 @@ interface HelpModalProps {
 }
 
 function HelpModal({ isOpen, onClose }: HelpModalProps) {
+    const { t } = useTranslation();
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="lg">
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>🎯 How to Play</ModalHeader>
+                <ModalHeader textAlign="center">🎯 {t('help.howToPlay')}</ModalHeader>
                 <ModalCloseButton />
 
                 <ModalBody>
@@ -33,43 +35,43 @@ function HelpModal({ isOpen, onClose }: HelpModalProps) {
                         {/* Game Rules */}
                         <Box>
                             <Text fontSize={{ base: "xl", md: "xl" }}>
-                                Guess the hidden word one letter at a time. Each wrong guess costs one attempt.
-                                Win by openLettering the full word before running out of attempts!
+                                {t('help.rules')}
                             </Text>
                         </Box>
 
                         {/* Difficulty Levels */}
                         <Box>
-                            <Heading size="sm" mb={2} fontSize={{ base: "xl", md: "xl" }}>⚙️ Difficulty Levels</Heading>
-                            <UnorderedList fontSize={{ base: "xl", md: "xl" }} spacing={1}>
-                                <ListItem><strong>Easy:</strong> 7 attempts </ListItem>
-                                <ListItem><strong>Normal:</strong> 5 attempts</ListItem>
-                                <ListItem><strong>Hard:</strong> 3 attempts</ListItem>
+                            <Heading size="sm" mb={2} fontSize={{ base: "xl", md: "xl" }}>⚙️ {t('help.difficultyLevels')}</Heading>
+                            <UnorderedList style={{ listStyleType: "none" }} fontSize={{ base: "xl", md: "xl" }} spacing={1}>
+                                <ListItem><strong>{t('help.difficulties.easy')}:</strong> 7 {t('help.attempts')}</ListItem>
+                                <ListItem><strong>{t('help.difficulties.normal')}:</strong> 5 {t('help.attempts')}</ListItem>
+                                <ListItem><strong>{t('help.difficulties.hard')}:</strong> 3 {t('help.attempts')}</ListItem>
                             </UnorderedList>
                         </Box>
 
-                        {/* Actions */}
+                        {/* Controls */}
                         <Box>
-                            <Heading size="sm" mb={2} fontSize={{ base: "xl", md: "xl" }}>💡 Special Actions</Heading>
-                            <UnorderedList fontSize={{ base: "xl", md: "xl" }} spacing={1}>
-                                <ListItem><strong>Get Hint:</strong> Request a hint to help you guess the word.</ListItem>
-                                <ListItem><strong>Open Letter:</strong> Open a letter in the word to make guessing easier, costs 1 attempt. You can openLetter 2 letters for Easy, and 1 for Normal. In Hard mode, this action is not available.</ListItem>
+                            <Heading size="sm" mb={2} fontSize={{ base: "xl", md: "xl" }}>🕹️ {t('help.controls')}</Heading>
+                            <UnorderedList style={{ listStyleType: "none" }} fontSize={{ base: "xl", md: "xl" }} spacing={1}>
+                                <ListItem><strong>💡 {t('help.getHint')}:</strong> {t('help.hintDescription')}</ListItem>
+                                <ListItem><strong>🔍 {t('help.openLetter')}:</strong> {t('help.openLetterDescription')}</ListItem>
+                                <ListItem><strong>🎮 {t('help.newGame')}:</strong> {t('help.newGameDescription')}</ListItem>
                             </UnorderedList>
                         </Box>
 
                         {/* Keyboard Usage */}
                         <Box>
-                            <Heading size="sm" mb={2} fontSize={{ base: "xl", md: "xl" }}>⌨️ Using the Keyboard</Heading>
+                            <Heading size="sm" mb={2} fontSize={{ base: "xl", md: "xl" }}>⌨️ {t('help.usingKeyboard')}</Heading>
                             <Text fontSize={{ base: "xl", md: "xl" }}>
-                                Use your keyboard to guess letters directly. Press the corresponding key for your guess.
+                                {t('help.keyboardDescription')}
                             </Text>
                         </Box>
                     </VStack>
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme="blue" onClick={onClose} size={{ base: "md", md: "lg" }} fontSize={{ base: "xl", md: "xl" }}>
-                        Got it!
+                    <Button colorScheme="green" onClick={onClose} size={{ base: "md", md: "lg" }} fontSize={{ base: "xl", md: "xl" }}>
+                        {t('help.gotIt')}
                     </Button>
                 </ModalFooter>
             </ModalContent>
