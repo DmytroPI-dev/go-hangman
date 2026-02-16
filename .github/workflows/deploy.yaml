@@ -34,7 +34,7 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_TOKEN }}'
           channelId: live
           projectId: hangman-go-f62b3
-          entryPoint: 'frontend'
+          entryPoint: ./frontend
 
   backend:
     if: github.event.pull_request.merged == true
