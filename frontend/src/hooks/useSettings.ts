@@ -1,19 +1,21 @@
 import { useState, useEffect } from "react";
 import type { Language, Difficulty } from "../types/game";
 
-
+const INTRO_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 const SETTINGS_KEY = "hangman_settings";
 
 interface Settings {
     language: Language;
     difficulty: Difficulty;
     hasSeenIntro: boolean;
+    introSeenAt?: number;
 }
 
 const DEFAULT_SETTINGS: Settings = {
     language: "en",
     difficulty: "Easy",
     hasSeenIntro: false,
+    introSeenAt: undefined,
 }
 
 // Custom hook to manage user settings and persist them in localStorage
@@ -23,6 +25,12 @@ export const useSettings = () => {
             const savedSettings = localStorage.getItem(SETTINGS_KEY);
             if (savedSettings) {
                 const parsed = JSON.parse(savedSettings);
+                // Check if intro TTL has expired
+                if (parsed.introSeenAt && Date.now() - parsed.introSeenAt > INTRO_TTL_MS) {
+                    parsed.hasSeenIntro = false;
+                    parsed.introSeenAt = undefined;
+                }
+                // Validate the parsed settings structure
                 if (parsed.language && parsed.difficulty && typeof parsed.hasSeenIntro === "boolean") {
                     return parsed;
                 }
@@ -48,7 +56,7 @@ export const useSettings = () => {
     }
 
     const markIntroSeen = () => {
-        setSettings(prev => ({ ...prev, hasSeenIntro: true }));
+        setSettings(prev => ({ ...prev, hasSeenIntro: true, introSeenAt: Date.now() }));
     }
 
     return {
