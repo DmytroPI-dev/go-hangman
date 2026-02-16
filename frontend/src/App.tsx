@@ -1,4 +1,4 @@
-import { Box, VStack, HStack, Button, Text, Heading, useToast, Spinner} from "@chakra-ui/react";
+import { Box, VStack, HStack, Button, Text, Heading, useToast, Spinner } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { workbookPageStyles, redMarginStyles } from "./theme/workBookTheme";
 import { useGame } from "./hooks/useGame";
@@ -12,6 +12,7 @@ import HangmanDraw from "./components/HangmanDraw";
 import Intro from "./components/Intro";
 import HelpModal from "./components/HelpModal";
 import SettingsDrawer from "./components/SettingsDrawer";
+import { base } from "framer-motion/client";
 
 function App() {
   const { isFirstVisit, markIntroSeen, language, difficulty, updateLanguage, updateDifficulty } = useSettings();
@@ -84,6 +85,7 @@ function App() {
     }
   }, [isGameOver, sessionId, guessedLetters, language, makeGuess]);
 
+  // Show hint in a toast notification when received from the API.
   useEffect(() => {
     if (hint) {
       toast({
@@ -100,6 +102,24 @@ function App() {
       resetHint();
     };
   }, [hint, toast, resetHint]);
+
+  // Show game over toast when game ends, with different messages for win/loss and displaying the correct word
+  useEffect(() => {
+    if (isGameOver) {
+      toast({
+        title: won ? "🎉 You Won!" : "😢 Game Over",
+        description: `The word is: ${currentWord.replace(/_/g, ' ')}`,
+        duration: 5000,
+        isClosable: true,
+        status: won ? "success" : "error",
+        position: "top",
+        containerStyle: {
+          fontSize: "2xl",
+          fontWeight: "bold",
+        },
+      });
+    }
+  }, [isGameOver, won, currentWord, toast]);
 
   // Function to handle game start with selected settings, called from GameSetup component
   const handleGameStart = async (lang: Language, diff: Difficulty) => {
@@ -204,12 +224,56 @@ function App() {
             leftIcon={<span>❓</span>}
             onClick={onHelpOpen}
             variant="ghost"
+            marginTop={2}
             size="lg"
             position="absolute"
             top={12}
             right={-2}
             colorScheme="teal"
           />
+          {/* Hint button for mobile */}
+          <Button
+            leftIcon={<span>💡</span>}
+            onClick={handleHintClick}
+            variant="ghost"
+            marginTop={2}
+            display={{ base: "inline-flex", md: "none" }}
+            size="lg"
+            position="absolute"
+            top={20}
+            right={-2}
+            colorScheme="whiteAlpha"
+          />
+          {/* New Game Button for mobile */}
+          <Button
+            leftIcon={<span>🎮</span>}
+            onClick={handleNewGame}
+            variant="ghost"
+            marginTop={2}
+            display={{ base: "inline-flex", md: "none" }}
+            size="lg"
+            position="absolute"
+            top={28}
+            right={-2}
+            colorScheme="whiteAlpha"
+          />
+          {/* Open Letter Button for mobile */}
+          {difficulty !== "Hard" && (
+          <Button
+            leftIcon={<span>🔍</span>}
+            onClick={handleOpenLetter}
+            variant="ghost"
+            marginTop={2}
+            display={{ base: "inline-flex", md: "none" }}
+            size="lg"
+            position="absolute"
+            top={36}
+            right={-2}
+            colorScheme="whiteAlpha"
+            />
+          )}
+          {/* Game content */}
+
           <VStack spacing={{ base: 4, md: 6 }} maxW="800px" mx="auto" px={{ base: 2, md: 0 }}>
             <Heading as="h1" size={{ base: "xl", md: "2xl" }} color="#1a2a6c">Hangman Game</Heading>
             {/* Game status */}
@@ -230,6 +294,7 @@ function App() {
               <Button
                 colorScheme="blue"
                 onClick={handleHintClick}
+                display={{base: "none", md: "inline-flex"}}
                 isDisabled={isGameOver}
                 size={{ base: "lg", md: "xl" }}
                 border="2px solid"
@@ -248,64 +313,52 @@ function App() {
               >
                 💡Get Hint
               </Button>
-                {difficulty !== "Hard" && (
-                  <Button
-                    colorScheme="teal"
-                    onClick={handleOpenLetter}
-                    isDisabled={isGameOver || triesLeft <= 1 || openLetterAttempts <= 0}
-                    size={{ base: "lg", md: "xl" }}
-                    border="2px solid"
-                    borderColor="teal.600"
-                    bg="white"
-                    color="teal.600"
-                    fontWeight="bold"
-                    fontSize={{ base: "lg", md: "xl" }}
-                    transform={`rotate(${Math.random() * 2 - 1}deg)`}
-                    boxShadow="2px 2px 0px rgba(0,0,0,0.1)"
-                    sx={{ filter: 'url(#wavy-btn)' }}
-                    _hover={{
-                      bg: "teal.50",
-                      transform: "translateY(-1px)",
-                    }}
-                  >
-                    🔍 Open Letter
-                  </Button>
-                )}
+              {difficulty !== "Hard" && (
                 <Button
-                  colorScheme="green"
-                  onClick={handleNewGame}
+                  colorScheme="teal"
+                  display={{ base: "none", md: "inline-flex" }}
+                  onClick={handleOpenLetter}
+                  isDisabled={isGameOver || triesLeft <= 1 || openLetterAttempts <= 0}
                   size={{ base: "lg", md: "xl" }}
                   border="2px solid"
-                  borderColor="green.600"
+                  borderColor="teal.600"
                   bg="white"
-                  color="green.600"
+                  color="teal.600"
                   fontWeight="bold"
                   fontSize={{ base: "lg", md: "xl" }}
                   transform={`rotate(${Math.random() * 2 - 1}deg)`}
                   boxShadow="2px 2px 0px rgba(0,0,0,0.1)"
                   sx={{ filter: 'url(#wavy-btn)' }}
                   _hover={{
-                    bg: "green.50",
+                    bg: "teal.50",
                     transform: "translateY(-1px)",
                   }}
                 >
-                  🎮 New Game
+                  🔍 Open Letter
                 </Button>
-            </HStack>
-            {/* Game over message */}
-            {isGameOver && (
-              <Box
-                p={4}
-                bg={won ? "green.100" : "red.100"}
-                borderRadius="md"
-                borderWidth={2}
-                borderColor={won ? 'green.500' : 'red.500'}
+              )}
+              <Button
+                colorScheme="green"
+                display= {{ base: "none", md: "inline-flex" }}
+                onClick={handleNewGame}
+                size={{ base: "lg", md: "xl" }}
+                border="2px solid"
+                borderColor="green.600"
+                bg="white"
+                color="green.600"
+                fontWeight="bold"
+                fontSize={{ base: "lg", md: "xl" }}
+                transform={`rotate(${Math.random() * 2 - 1}deg)`}
+                boxShadow="2px 2px 0px rgba(0,0,0,0.1)"
+                sx={{ filter: 'url(#wavy-btn)' }}
+                _hover={{
+                  bg: "green.50",
+                  transform: "translateY(-1px)",
+                }}
               >
-                <Heading size={{ base: "2xl", md: "2xl" }} color={won ? "green.500" : "red.500"}
-                >{won ? '🎉 You Won!' : '😢 Game Over'}</Heading>
-                <Text mt={2}>The word was: <strong>{currentWord.replace(/_/g, ' ')}</strong></Text>
-              </Box>
-            )}
+                🎮 New Game
+              </Button>
+            </HStack>
           </VStack>
         </Box>
         {/* // Settings Drawer */}

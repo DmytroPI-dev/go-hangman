@@ -25,7 +25,7 @@ function HelpModal({ isOpen, onClose }: HelpModalProps) {
         <Modal isOpen={isOpen} onClose={onClose} size="lg">
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>🎯 How to Play</ModalHeader>
+                <ModalHeader textAlign="center">🎯 How to Play</ModalHeader>
                 <ModalCloseButton />
 
                 <ModalBody>
@@ -41,19 +41,20 @@ function HelpModal({ isOpen, onClose }: HelpModalProps) {
                         {/* Difficulty Levels */}
                         <Box>
                             <Heading size="sm" mb={2} fontSize={{ base: "xl", md: "xl" }}>⚙️ Difficulty Levels</Heading>
-                            <UnorderedList fontSize={{ base: "xl", md: "xl" }} spacing={1}>
+                            <UnorderedList style={{ listStyleType: "none" }} fontSize={{ base: "xl", md: "xl" }} spacing={1}>
                                 <ListItem><strong>Easy:</strong> 7 attempts </ListItem>
                                 <ListItem><strong>Normal:</strong> 5 attempts</ListItem>
                                 <ListItem><strong>Hard:</strong> 3 attempts</ListItem>
                             </UnorderedList>
                         </Box>
 
-                        {/* Actions */}
+                        {/* Controls */}
                         <Box>
-                            <Heading size="sm" mb={2} fontSize={{ base: "xl", md: "xl" }}>💡 Special Actions</Heading>
-                            <UnorderedList fontSize={{ base: "xl", md: "xl" }} spacing={1}>
-                                <ListItem><strong>Get Hint:</strong> Request a hint to help you guess the word.</ListItem>
-                                <ListItem><strong>Open Letter:</strong> Open a letter in the word to make guessing easier, costs 1 attempt. You can openLetter 2 letters for Easy, and 1 for Normal. In Hard mode, this action is not available.</ListItem>
+                            <Heading size="sm" mb={2} fontSize={{ base: "xl", md: "xl" }}>🕹️ Game Controls</Heading>
+                            <UnorderedList style={{ listStyleType: "none" }} fontSize={{ base: "xl", md: "xl" }} spacing={1}>
+                                <ListItem><strong>💡 Get Hint:</strong> Request a hint to help you guess the word.</ListItem>
+                                <ListItem><strong>🔍 Open Letter:</strong> Open a letter in the word to make guessing easier, costs 1 attempt. You can openLetter 2 letters for Easy, and 1 for Normal. In Hard mode, this action is not available.</ListItem>
+                                <ListItem><strong>🎮 New Game:</strong> Start a new game with the same settings.</ListItem>
                             </UnorderedList>
                         </Box>
 
@@ -68,7 +69,7 @@ function HelpModal({ isOpen, onClose }: HelpModalProps) {
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme="blue" onClick={onClose} size={{ base: "md", md: "lg" }} fontSize={{ base: "xl", md: "xl" }}>
+                    <Button colorScheme="green" onClick={onClose} size={{ base: "md", md: "lg" }} fontSize={{ base: "xl", md: "xl" }}>
                         Got it!
                     </Button>
                 </ModalFooter>
