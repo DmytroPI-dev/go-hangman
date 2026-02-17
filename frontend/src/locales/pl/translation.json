@@ -1,7 +1,11 @@
 {
     "game": {
         "title": "Gra Wisielec",
-        "attemptsLeft": "Pozostało prób: {{count}}",
+        "attemptsLeft": "Pozostało {{count}} prób",
+        "attemptsLeft_0": "Brak pozostałych prób 😢",
+        "attemptsLeft_one": "Pozostała {{count}} próba",
+        "attemptsLeft_few": "Pozostały {{count}} próby",
+        "attemptsLeft_many": "Pozostało {{count}} prób",
         "youWon": "Wygrałeś! 🎉",
         "gameOver": "Koniec gry! 😢",
         "newGame": "Nowa gra",
@@ -11,6 +15,10 @@
         "letterOpened": "Litera otwarta!",
         "theWordWas": "Słowo to było",
         "openLetterAttempts": "Można otworzyć {{count}} liter",
+        "openLetterAttempts_0": "Nie można otworzyć żadnej litery! 😢",
+        "openLetterAttempts_one": "Można otworzyć {{count}} literę",
+        "openLetterAttempts_few": "Można otworzyć {{count}} litery",
+        "openLetterAttempts_many": "Można otworzyć {{count}} liter",
         "selectLanguage": "Wybierz język",
         "selectDifficulty": "Wybierz poziom trudności",
         "setupTitle": "Ustawienia gry",
@@ -30,7 +38,7 @@
         "title": "Ustawienia gry",
         "language": "Język",
         "difficulty": "Poziom trudności",
-        "saveAndNewGame": "Zapisz i nowa gra",
+        "saveAndNewGame": "Zapisz",
         "cancel": "Anuluj",
         "difficulties": {
             "easy": "Łatwy",

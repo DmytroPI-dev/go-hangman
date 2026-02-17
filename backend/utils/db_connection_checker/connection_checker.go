@@ -32,7 +32,7 @@ func main() {
 	// 1. Setup Configuration
 	projectID := os.Getenv("FIREBASE_PROJECT_ID")
 	appId := "go-hangman-v1" // Matches our seeder and firestore structure
-	lang := "pl"             // Change this to "pl" or "ua" to test other collections
+	lang := "pl"             // Change this to "en" or "ua" to test other collections
 
 	if projectID == "" {
 		fmt.Println("❌ Error: FIREBASE_PROJECT_ID environment variable is not set.")

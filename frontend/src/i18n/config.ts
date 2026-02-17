@@ -10,13 +10,13 @@ i18n
     .init({
         resources: {
             en: { translation: enTranslation },
-            ua: { translation: uaTranslation },
+            uk: { translation: uaTranslation },
             pl: { translation: plTranslation }
         },
-        lng: 'en', // Default language
+        lng: 'en',
         fallbackLng: 'en',
         interpolation: {
-            escapeValue: false // React already escapes
+            escapeValue: false
         }
     });
 
