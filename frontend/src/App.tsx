@@ -85,7 +85,7 @@ function App() {
         // Language-specific validation
         if (language === "en" && /^[a-z]$/.test(key)) {
           makeGuess(key);
-        } else if (language === "ua" && (/^[\u0400-\u04FF]$/.test(key) || key === "'")) {
+        } else if (language === "uk" && (/^[\u0400-\u04FF]$/.test(key) || key === "'")) {
           makeGuess(key);
         } else if (language === "pl" && /^[a-ząćęłńóśźż]$/.test(key)) {
           makeGuess(key);
@@ -239,7 +239,7 @@ function App() {
             position="absolute"
             top={4}
             right={-2}
-            colorScheme="blue"
+            colorScheme="whiteAlpha"
           />
 
           {/* Help Button */}
@@ -252,7 +252,7 @@ function App() {
             position="absolute"
             top={12}
             right={-2}
-            colorScheme="teal"
+            colorScheme="whiteAlpha"
           />
           {/* Hint button for mobile */}
           <Button
@@ -284,6 +284,7 @@ function App() {
           {difficulty !== "Hard" && (
             <Button
               leftIcon={<span>🔍</span>}
+              isDisabled={isGameOver || triesLeft <= 1 || openLetterAttempts <= 0}
               onClick={handleOpenLetter}
               variant="ghost"
               marginTop={2}
@@ -300,10 +301,19 @@ function App() {
           <VStack spacing={{ base: 2, md: 6 }} maxW="800px" mx="auto" px={{ base: 1, md: 0 }}>
             <Heading as="h1" size={{ base: "xl", md: "2xl" }} color="#1a2a6c">{t('game.title')}</Heading>
             {/* Game status */}
-            <Stack spacing={{ base: 1, md: 2 }} direction={{ base: "column", md: "row" }} align="flex-start">
-              <Text fontSize={{ base: "2xl", md: "2xl" }}>{t('game.attemptsLeft', { count: triesLeft })}</Text>
+            <Stack spacing={{ base: 1, md: 2 }} direction="column" align="flex-start">
+              <Text fontSize={{ base: "2xl", md: "2xl" }}>
+              { triesLeft === 0
+                ? t('game.attemptsLeft_0')
+                : t('game.attemptsLeft', { count: triesLeft })
+              }
+              </Text>
               {difficulty !== "Hard" && (
-                <Text fontSize={{ base: "2xl", md: "2xl" }}>{t('game.openLetterAttempts', { count: openLetterAttempts })}</Text>
+                <Text fontSize={{ base: "2xl", md: "2xl" }}>
+                  {openLetterAttempts === 0
+                  ? t('game.openLetterAttempts_0')
+                  : t('game.openLetterAttempts', { count: openLetterAttempts })
+                }</Text>
               )}
             </Stack>
             {/* Hangman drawing */}
@@ -315,7 +325,7 @@ function App() {
             {/* Action buttons */}
             <HStack spacing={4} flexWrap="wrap" justifyContent="center">
               <Button
-                colorScheme="blue"
+                colorScheme="whiteAlpha"
                 onClick={handleHintClick}
                 display={{ base: "none", md: "inline-flex" }}
                 isDisabled={isGameOver}
@@ -338,7 +348,7 @@ function App() {
               </Button>
               {difficulty !== "Hard" && (
                 <Button
-                  colorScheme="teal"
+                  colorScheme="whiteAlpha"
                   display={{ base: "none", md: "inline-flex" }}
                   onClick={handleOpenLetter}
                   isDisabled={isGameOver || triesLeft <= 1 || openLetterAttempts <= 0}

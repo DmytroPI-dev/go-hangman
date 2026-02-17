@@ -33,6 +33,6 @@ export type GameState = {
     opened_letter?: string
 }
 
-export type Language = "en" | "ua" | "pl"
+export type Language = "en" | "uk" | "pl"
 
 export type Difficulty = "Easy" | "Normal" | "Hard"

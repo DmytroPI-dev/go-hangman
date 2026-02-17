@@ -15,14 +15,14 @@ interface KeyboardProps {
 // Alphabet letters matching actual keyboard layouts
 const alphabets = {
     en: ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'],
-    ua: ['ЙЦУКЕНГШЩЗХЇҐ', 'ФІВАПРОЛДЖЄ', "ЯЧСМИТЬБЮ'"],
+    uk: ['ЙЦУКЕНГШЩЗХЇҐ', 'ФІВАПРОЛДЖЄ', "ЯЧСМИТЬБЮ'"],
     pl: ['QWERTYUIOPŻŹ', 'ASDFGHJKLŁĄ', 'ZXCVBNMŚĆĘŃ']
 }
 
 // mobile-friendly keyboard component 
 const mAlphabets = {
     en: ['QWERT', 'YUIOP', 'ASDFG', 'HJKLZ', 'XCVBNM'],
-    ua: ['ЙЦУКЕН', 'ГШЩЗХЇ', 'ҐФІВАП', 'РОЛДЖ', 'ЯЧСМИТ',"ЇЄЬБЮ'" ],
+    uk: ['ЙЦУКЕН', 'ГШЩЗХЇ', 'ҐФІВАП', 'РОЛДЖ', 'ЯЧСМИТ',"ЇЄЬБЮ'" ],
     pl: ['QWERTY', 'UIOPŻŹ', 'ASDFGH', 'JKLŁĄZ', 'XCVBN','MŚĆĘŃ']
 }
 

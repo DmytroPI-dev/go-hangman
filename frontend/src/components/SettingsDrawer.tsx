@@ -64,7 +64,7 @@ function SettingsDrawer({
                             <RadioGroup value={tempLanguage} onChange={(val) => setTempLanguage(val as Language)} fontSize={{base :"xl", md: "xl"}}>
                                 <Stack direction="column">
                                     <Radio value="en" size={{ base: "lg", md: "lg" }}><Text fontSize={{base: "xl", md: "xl"}} >🇬🇧 English</Text></Radio>
-                                    <Radio value="ua" size={{ base: "lg", md: "lg" }}><Text fontSize={{base: "xl", md: "xl"}}>🇺🇦 Українська</Text></Radio>
+                                    <Radio value="uk" size={{ base: "lg", md: "lg" }}><Text fontSize={{base: "xl", md: "xl"}}>🇺🇦 Українська</Text></Radio>
                                     <Radio value="pl" size={{ base: "lg", md: "lg" }}><Text fontSize={{base: "xl", md: "xl"}}>🇵🇱 Polski</Text></Radio>
                                 </Stack>
                             </RadioGroup>

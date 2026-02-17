@@ -1,0 +1,34 @@
+{
+    "data": {
+        "en": [
+            {
+                "word": "elephant",
+                "hint": "A large mammal with a trunk and tusks"
+            },
+            {
+                "word": "computer",
+                "hint": "An electronic device for processing data"
+            }
+        ],
+        "ua": [
+            {
+                "word": "слон",
+                "hint": "Велика тварина з хоботом і бивнями"
+            },
+            {
+                "word": "комп'ютер",
+                "hint": "Електронний пристрій для обробки даних"
+            }
+        ],
+        "pl": [
+            {
+                "word": "słoń",
+                "hint": "Duże zwierzę z trąbą i kłami"
+            },
+            {
+                "word": "komputer",
+                "hint": "Urządzenie elektroniczne do przetwarzania danych"
+            }
+        ]
+    }
+}

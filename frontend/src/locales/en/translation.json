@@ -1,7 +1,10 @@
 {
     "game": {
         "title": "Hangman Game",
-        "attemptsLeft": "Attempts left: {{count}}",
+        "attemptsLeft_0": "No attempts left 😢",
+        "attemptsLeft": "{{count}} attempts left",
+        "attemptsLeft_one": "{{count}} attempt left",
+        "attemptsLeft_other": "{{count}} attempts left",
         "youWon": "You Won! 🎉",
         "gameOver": "Game Over! 😢",
         "newGame": "New Game",
@@ -11,6 +14,9 @@
         "letterOpened": "Letter Opened!",
         "theWordWas": "The word was",
         "openLetterAttempts": "Can open {{count}} letters",
+        "openLetterAttempts_0": "Cannot open any more letters! 😢",
+        "openLetterAttempts_one": "Can open {{count}} letter",
+        "openLetterAttempts_other": "Can open {{count}} letters",
         "selectLanguage": "Select Language",
         "selectDifficulty": "Select Difficulty",
         "setupTitle": "Game Setup",
@@ -30,7 +36,7 @@
         "title": "Game Settings",
         "language": "Language",
         "difficulty": "Difficulty",
-        "saveAndNewGame": "Save & New Game",
+        "saveAndNewGame": "Save",
         "cancel": "Cancel",
         "difficulties": {
             "easy": "Easy",

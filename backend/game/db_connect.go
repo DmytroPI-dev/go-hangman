@@ -15,7 +15,7 @@ import (
 type WordRecord struct {
 	Text     string `json:"text"`
 	Hint     string `json:"hint"`
-	Language string `json:"language"` // e.g., "en", "pl", "ua"
+	Language string `json:"language"` // e.g., "en", "pl", "uk"
 }
 
 // FirestoreQueryResult represents the result of a Firestore query.
@@ -31,6 +31,14 @@ type FirestoreQueryResult []struct {
 			} `json:"hint"`
 		} `json:"fields"`
 	} `json:"document"`
+}
+
+// getLanguageCode maps the provided language to the corresponding Firestore collection name.
+func getLanguageCode(lang string) (string) {
+	if lang == "uk" {
+		return "ua"
+	}
+	return lang
 }
 
 // getEnvVars loads and returns required Firebase environment variables.
@@ -66,19 +74,21 @@ func FetchRandomWord(lang string) (*WordRecord, error) {
 		return nil, err
 	}
 
+	firestoreLang := getLanguageCode(lang)
+
 	// Generate a random index
 	randomIndex := GenerateRandomIndex(20)
 
 	// Construct Firestore document paths
 	fullParentPath := fmt.Sprintf("projects/%s/databases/(default)/documents/artifacts/%s/public/data", firebaseProjectID, firebaseAppID)
-	jumpToPath := fmt.Sprintf("%s/%s/%s", fullParentPath, lang, randomIndex)
+	jumpToPath := fmt.Sprintf("%s/%s/%s", fullParentPath, firestoreLang, randomIndex)
 	firebaseURL := fmt.Sprintf("https://firestore.googleapis.com/v1/%s:runQuery", fullParentPath)
 
 	// Build Firestore query
 	query := map[string]any{
 		"structuredQuery": map[string]any{
 			"from": []map[string]any{
-				{"collectionId": lang},
+				{"collectionId": firestoreLang},
 			},
 			"orderBy": []map[string]any{
 				{
@@ -118,7 +128,7 @@ func FetchRandomWord(lang string) (*WordRecord, error) {
 
 	if len(results) == 0 || results[0].Document.Fields.Text.StringValue == "" {
 		// Fallback to a predefined word if no result
-		return fetchFallbackWord(firebaseProjectID, firebaseAppID, lang)
+		return fetchFallbackWord(firebaseProjectID, firebaseAppID, firestoreLang, lang)
 	}
 
 	doc := results[0].Document
@@ -130,10 +140,10 @@ func FetchRandomWord(lang string) (*WordRecord, error) {
 }
 
 // fetchFallbackWord fetches a word from a predefined fallback location in Firestore.
-func fetchFallbackWord(firebaseProjectID, firebaseAppID, lang string) (*WordRecord, error) {
+func fetchFallbackWord(firebaseProjectID, firebaseAppID, firestoreLang, originalLang string) (*WordRecord, error) {
 	fallbackURL := fmt.Sprintf(
 		"https://firestore.googleapis.com/v1/projects/%s/databases/(default)/documents/artifacts/%s/public/data/%s?pageSize=1",
-		firebaseProjectID, firebaseAppID, lang,
+		firebaseProjectID, firebaseAppID, firestoreLang,
 	)
 
 	response, err := http.Get(fallbackURL)
@@ -161,7 +171,7 @@ func fetchFallbackWord(firebaseProjectID, firebaseAppID, lang string) (*WordReco
 	return &WordRecord{
 		Text:     data.Documents[0].Fields.Text.StringValue,
 		Hint:     data.Documents[0].Fields.Hint.StringValue,
-		Language: lang,
+		Language: originalLang,
 	}, nil
 }
 

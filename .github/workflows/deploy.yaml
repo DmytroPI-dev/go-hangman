@@ -35,7 +35,7 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
           channelId: live
-          projectId: hangman-go-f62b3
+          projectId: '${{ secrets.GCP_PROJECT_ID }}'
           entryPoint: frontend
 
   backend:
@@ -81,4 +81,4 @@ jobs:
             --region us-central1 \
             --allow-unauthenticated \
             --port 8080 \
-            --project hangman-go-f62b3
+            --project ${{ secrets.GCP_PROJECT_ID }}

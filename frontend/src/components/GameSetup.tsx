@@ -23,7 +23,7 @@ function GameSetup({ onGameStart }: GameSetupProps) {
                 <Text mb={2} fontSize={{base: "xl", md: "2xl", sm: "xl"}}>Language/Мова/Język</Text>
                 <Select size="lg" value={language} onChange={(e) => setLanguage(e.target.value as Language)}>
                     <option value="en">English</option>
-                    <option value="ua">Українська</option>
+                    <option value="uk">Українська</option>
                     <option value="pl">Polski</option>
                 </Select>
             </Box>
